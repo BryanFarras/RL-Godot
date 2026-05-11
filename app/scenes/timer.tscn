@@ -1,13 +1,7 @@
 [gd_scene format=3 uid="uid://dj86unblfoqvc"]
 
 [ext_resource type="Script" uid="uid://8uod8i1hb6kl" path="res://scripts/timer.gd" id="1_srplv"]
-
-[sub_resource type="Theme" id="Theme_c48lc"]
-RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
-RichTextLabel/colors/font_outline_color = Color(0, 0, 0, 1)
-RichTextLabel/colors/font_shadow_color = Color(0, 0, 0, 0.37254903)
-RichTextLabel/constants/outline_size = 6
-RichTextLabel/font_sizes/normal_font_size = 30
+[ext_resource type="Theme" uid="uid://b773vas1j82d2" path="res://themes/base_text.tres" id="2_5lxq6"]
 
 [node name="Timer" type="Control" unique_id=1856813160]
 layout_mode = 3
@@ -18,19 +12,29 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_srplv")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=999944642]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2038433113]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -125.5
-offset_right = 164.0
-offset_bottom = 42.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-theme = SubResource("Theme_c48lc")
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="TimerLabel" type="RichTextLabel" parent="MarginContainer" unique_id=999944642]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme = ExtResource("2_5lxq6")
 fit_content = true
 horizontal_alignment = 1
 
-[node name="Timer" type="Timer" parent="." unique_id=1925684605]
+[node name="Timer" type="Timer" parent="MarginContainer" unique_id=1925684605]
+unique_name_in_owner = true
 wait_time = 10.0
 one_shot = true

@@ -49,11 +49,6 @@ var look_rotation : Vector2
 var move_speed : float = 0.0
 var freeflying : bool = false
 
-signal runner_tagged
-
 ## IMPORTANT REFERENCES
 @onready var head: Node3D = $Head
 @onready var collider: CollisionShape3D = $CollisionShape3D
-
-func _on_runner_tagged() -> void:
-	print("Runner Tagged!")

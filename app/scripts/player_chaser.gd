@@ -60,6 +60,8 @@ signal runner_tagged
 @onready var head: Node3D = $Head
 @onready var collider: CollisionShape3D = $CollisionShape3D
 
+var has_tagged := false
+
 func _ready() -> void:
 	check_input_mappings()
 	look_rotation.y = rotation.y
@@ -133,12 +135,14 @@ func _physics_process(delta: float) -> void:
 	# Use velocity to actually move and check for collisionx
 	move_and_slide() # Move first!
 
-	for i in get_slide_collision_count():
-		var collision = get_slide_collision(i)
-		if collision and collision.get_collider() and collision.get_collider().is_in_group("runner"):
-			print("Tagged!")
-			emit_signal("runner_tagged")
-			break
+	if not has_tagged:
+		for i in get_slide_collision_count():
+			var collision = get_slide_collision(i)
+			if collision and collision.get_collider() and collision.get_collider().is_in_group("runner"):
+				print("Tagged!")
+				emit_signal("runner_tagged")
+				has_tagged = true
+				break
 
 ## Rotate us to look around.
 ## Base of controller rotates around y (left/right). Head rotates around x (up/down).
