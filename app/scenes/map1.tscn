@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cpw1bb2vaj3p8"]
+
+[ext_resource type="Material" uid="uid://cs70wsueg1n0w" path="res://material/transparency_alpha.tres" id="1_k1lxp"]
+
+[node name="Map1" type="Node3D" unique_id=826070910]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1756966019]
+transform = Transform3D(-0.70008814, -0.39151412, 0.5971544, 0.1526086, 0.73492414, 0.660755, -0.69755805, 0.5537176, -0.45476317, 6.2000003, 3.9999998, -3.1999998)
+light_energy = 0.646
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="." unique_id=515423537]
+use_collision = true
+size = Vector3(8, 0.1, 8)
+
+[node name="WallBound" type="Node3D" parent="." unique_id=1648186785]
+
+[node name="Wall1" type="CSGBox3D" parent="WallBound" unique_id=1196874977]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.7, 4)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_k1lxp")
+
+[node name="Wall2" type="CSGBox3D" parent="WallBound" unique_id=1997103878]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.7, -4)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_k1lxp")
+
+[node name="Wall3" type="CSGBox3D" parent="WallBound" unique_id=357700769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.7, -1.7484555e-07)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_k1lxp")
+
+[node name="Wall4" type="CSGBox3D" parent="WallBound" unique_id=1688593069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.7, 1.7484555e-07)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_k1lxp")
