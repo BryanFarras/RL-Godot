@@ -42,6 +42,11 @@ extends CharacterBody3D
 
 var move_speed : float = 0.0
 
+## AI-controlled input — set by ai_runner.gd each physics step.
+## When non-zero the AI drives movement instead of keyboard input.
+var ai_move_dir : Vector3 = Vector3.ZERO
+var ai_wants_jump : bool = false
+
 ## Spawn state — stored on _ready() and restored on reset.
 var _spawn_position : Vector3
 var _spawn_rotation : Vector3
@@ -70,8 +75,10 @@ func _physics_process(delta: float) -> void:
 
 	# Apply jumping
 	if can_jump and is_on_floor():
-		if Input.is_action_just_pressed(input_jump):
+		var jump_pressed = Input.is_action_just_pressed(input_jump) or ai_wants_jump
+		if jump_pressed:
 			velocity.y = jump_velocity
+	ai_wants_jump = false  # Consume the AI jump request
 
 	# Modify speed based on sprinting
 	if can_sprint and Input.is_action_pressed(input_sprint):
@@ -81,10 +88,16 @@ func _physics_process(delta: float) -> void:
 
 	# Apply desired movement to velocity
 	if can_move:
-		var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
-		var forward = transform.basis.z
-		var right = transform.basis.x
-		var move_dir = (right * input_dir.x + forward * input_dir.y).normalized()
+		var move_dir : Vector3
+		if ai_move_dir != Vector3.ZERO:
+			# AI path: ai_move_dir is already a world-space unit vector
+			move_dir = ai_move_dir.normalized()
+		else:
+			# Player path: convert keyboard axes to world-space direction
+			var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
+			var forward = transform.basis.z
+			var right = transform.basis.x
+			move_dir = (right * input_dir.x + forward * input_dir.y).normalized()
 		var target_velocity = Vector3.ZERO
 		# Kill sideways drift when switching direction
 		var current_horizontal = Vector3(velocity.x, 0, velocity.z)

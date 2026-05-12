@@ -37,7 +37,6 @@ func _ready():
 	
 	# Connect timer to UI and reset
 	timer.runner_survived.connect(score._on_runner_survived)
-	timer.restart_game.connect(main_chaser.reset_state)
 	
 	# Connect timer to all chasers for synchronized resets
 	for chaser in chasers:

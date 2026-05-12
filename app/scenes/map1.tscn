@@ -2,6 +2,9 @@
 
 [ext_resource type="Material" uid="uid://cs70wsueg1n0w" path="res://material/transparency_alpha.tres" id="1_k1lxp"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k1lxp"]
+albedo_color = Color(0.13, 0.13, 0.13, 1)
+
 [node name="Map1" type="Node3D" unique_id=826070910]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1756966019]
@@ -13,6 +16,7 @@ shadow_enabled = true
 [node name="Floor" type="CSGBox3D" parent="." unique_id=515423537]
 use_collision = true
 size = Vector3(8, 0.1, 8)
+material = SubResource("StandardMaterial3D_k1lxp")
 
 [node name="WallBound" type="Node3D" parent="." unique_id=1648186785]
 

@@ -14,7 +14,11 @@ material = SubResource("StandardMaterial3D_j5kkq")
 [node name="player_runner" type="CharacterBody3D" unique_id=1926211280 groups=["runner"]]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 script = ExtResource("1_u0euo")
-input_jump = "jump_runner"
+input_left = "move_left"
+input_right = "move_right"
+input_forward = "move_up"
+input_back = "move_down"
+input_jump = "jump"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1408848426]
 mesh = SubResource("CapsuleMesh_u0euo")
