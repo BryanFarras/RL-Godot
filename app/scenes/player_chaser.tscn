@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://h06g2ay66ikn"]
 
 [ext_resource type="Script" uid="uid://6dousm4kaxdf" path="res://scripts/player_chaser.gd" id="1_5l7i6"]
+[ext_resource type="Script" uid="uid://cuyja4l36kxlb" path="res://scripts/ai/ai_chaser.gd" id="2_7ivy8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5l7i6"]
 albedo_color = Color(0, 0, 1, 1)
@@ -13,7 +14,6 @@ material = SubResource("StandardMaterial3D_5l7i6")
 [node name="player_chaser" type="CharacterBody3D" unique_id=866426251 groups=["chaser"]]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 script = ExtResource("1_5l7i6")
-can_sprint = true
 input_left = "move_left"
 input_right = "move_right"
 input_forward = "move_up"
@@ -29,6 +29,6 @@ shape = SubResource("CapsuleShape3D_5l7i6")
 [node name="Head" type="Node3D" parent="." unique_id=1925523034]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Head" unique_id=887237833]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -0.019257128, 0.0891422, -0.031725287)
-visible = false
+[node name="AI" type="Node3D" parent="." unique_id=353958739]
+script = ExtResource("2_7ivy8")
+metadata/_custom_type_script = "uid://by6nl5nh2n00n"

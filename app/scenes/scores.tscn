@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cn2piwj68yf4g"]
 
+[ext_resource type="Script" uid="uid://disx58j6rhdqq" path="res://scripts/scores.gd" id="1_p8jrb"]
 [ext_resource type="Theme" uid="uid://b773vas1j82d2" path="res://themes/base_text.tres" id="1_r5nmk"]
 
 [node name="Scores" type="Control" unique_id=1370206219]
@@ -10,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("1_p8jrb")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=603184168]
 layout_mode = 1
@@ -24,7 +26,20 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer" unique_id=721757150]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1690281443]
+layout_mode = 2
+
+[node name="ChaserScoreLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=721757150]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("1_r5nmk")
+
+[node name="RunnerScoreLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=413131403]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 50)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0

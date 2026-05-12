@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://cpw1bb2vaj3p8" path="res://scenes/map1.tscn" id="1_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://h06g2ay66ikn" path="res://scenes/player_chaser.tscn" id="2_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://c0q0vfwioth0t" path="res://scenes/player_runner.tscn" id="3_lnu2h"]
-[ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://dj86unblfoqvc" path="res://scenes/timer.tscn" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://cn2piwj68yf4g" path="res://scenes/scores.tscn" id="7_u5sy4"]
 
@@ -16,18 +15,9 @@ script = ExtResource("1_iywne")
 [node name="player_chaser" parent="." unique_id=405912350 instance=ExtResource("2_lnu2h")]
 transform = Transform3D(-0.17677668, 0, -0.1767767, 0, 0.25, 0, 0.1767767, 0, -0.17677668, -2.0052693, 0.5, -1.9969096)
 floor_stop_on_slope = false
-can_freefly = true
 
 [node name="player_runner" parent="." unique_id=1812147695 instance=ExtResource("3_lnu2h")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 2.0212271, 0.5, 2.0001023)
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=570059079]
-transform = Transform3D(1, 0, 0, 0, 1.1924881e-08, 1, 0, -1, 1.1924881e-08, 0, 6.941879, 0)
-visible = false
-
-[node name="ProtoController" parent="." unique_id=1686085327 instance=ExtResource("4_lbhrr")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 1.2, 0.3, -1.2)
-visible = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1492387326]
 
@@ -36,4 +26,8 @@ mouse_filter = 2
 
 [node name="Scores" parent="CanvasLayer" unique_id=1370206219 instance=ExtResource("7_u5sy4")]
 
+[connection signal="restart_game" from="player_chaser" to="." method="_on_restart_game"]
+[connection signal="restart_game" from="player_chaser" to="CanvasLayer/Timer" method="_on_restart_game"]
 [connection signal="runner_tagged" from="player_chaser" to="CanvasLayer/Timer" method="_on_runner_tagged"]
+[connection signal="restart_game" from="CanvasLayer/Timer" to="." method="_on_timer_restart_game"]
+[connection signal="runner_survived" from="CanvasLayer/Timer" to="CanvasLayer/Scores" method="_on_runner_survived"]

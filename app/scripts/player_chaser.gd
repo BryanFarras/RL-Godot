@@ -1,7 +1,4 @@
-# ProtoController v1.0 by Brackeys
-# CC0 License
-# Intended for rapid prototyping of first-person games.
-# Happy prototyping!
+# Player Chaser Script
 
 extends CharacterBody3D
 
@@ -49,12 +46,24 @@ extends CharacterBody3D
 ## Name of Input Action to toggle freefly mode.
 @export var input_freefly : String = "freefly"
 
+@export var restart : String = "restart"
+
 var mouse_captured : bool = false
 var look_rotation : Vector2
 var move_speed : float = 0.0
 var freeflying : bool = false
 
+## AI-controlled input — set by ai_chaser.gd each physics step.
+## When non-zero the AI drives movement instead of keyboard input.
+var ai_move_dir : Vector3 = Vector3.ZERO
+var ai_wants_jump : bool = false
+
+## Spawn state — stored on _ready() and restored on reset.
+var _spawn_position : Vector3
+var _spawn_look_rotation : Vector2
+
 signal runner_tagged
+signal restart_game
 
 ## IMPORTANT REFERENCES
 @onready var head: Node3D = $Head
@@ -66,13 +75,21 @@ func _ready() -> void:
 	check_input_mappings()
 	look_rotation.y = rotation.y
 	look_rotation.x = head.rotation.x
+	# Save spawn state for resets
+	_spawn_position = global_position
+	_spawn_look_rotation = look_rotation
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Mouse capturing
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		capture_mouse()
-	if Input.is_key_pressed(KEY_ESCAPE):
-		release_mouse()
+	#if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	#	capture_mouse()
+	#if Input.is_key_pressed(KEY_ESCAPE):
+	#	release_mouse()
+	
+	# Restart round (preserves scores)
+	if InputMap.has_action(restart) and Input.is_action_just_pressed(restart):
+		reset_state()
+		emit_signal("restart_game")
 	
 	# Look around
 	if mouse_captured and event is InputEventMouseMotion:
@@ -99,10 +116,12 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 			velocity += get_gravity() * delta
 
-	# Apply jumping
-	if can_jump:
-		if Input.is_action_just_pressed(input_jump) and is_on_floor():
+	# Apply jumping — supports both player input and AI request
+	if can_jump and is_on_floor():
+		var jump_pressed = Input.is_action_just_pressed(input_jump) or ai_wants_jump
+		if jump_pressed:
 			velocity.y = jump_velocity
+	ai_wants_jump = false  # Consume the AI jump request
 
 	# Modify speed based on sprinting
 	if can_sprint and Input.is_action_pressed(input_sprint):
@@ -110,12 +129,19 @@ func _physics_process(delta: float) -> void:
 	else:
 		move_speed = base_speed
 
-	# Apply desired movement to velocity
+	# Apply desired movement to velocity.
+	# The AI move_dir (world-space) takes priority over keyboard input when set.
 	if can_move:
-		var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
-		var forward = transform.basis.z
-		var right = transform.basis.x
-		var move_dir = (right * input_dir.x + forward * input_dir.y).normalized()
+		var move_dir : Vector3
+		if ai_move_dir != Vector3.ZERO:
+			# AI path: ai_move_dir is already a world-space unit vector
+			move_dir = ai_move_dir.normalized()
+		else:
+			# Player path: convert keyboard axes to world-space direction
+			var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
+			var forward = transform.basis.z
+			var right = transform.basis.x
+			move_dir = (right * input_dir.x + forward * input_dir.y).normalized()
 		var target_velocity = Vector3.ZERO
 		# Kill sideways drift when switching direction
 		var current_horizontal = Vector3(velocity.x, 0, velocity.z)
@@ -132,7 +158,7 @@ func _physics_process(delta: float) -> void:
 		if move_dir.dot(current_horizontal.normalized()) < 0:
 			current_horizontal = Vector3.ZERO
 
-	# Use velocity to actually move and check for collisionx
+	# Use velocity to actually move and check for collision
 	move_and_slide() # Move first!
 
 	if not has_tagged:
@@ -164,15 +190,24 @@ func disable_freefly():
 	collider.disabled = false
 	freeflying = false
 
+## Resets position, velocity, and camera direction to spawn state.
+func reset_state() -> void:
+	global_position = _spawn_position
+	velocity = Vector3.ZERO
+	look_rotation = _spawn_look_rotation
+	rotation.y = look_rotation.y
+	head.rotation.x = look_rotation.x
+	has_tagged = false
 
-func capture_mouse():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	mouse_captured = true
 
-
-func release_mouse():
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	mouse_captured = false
+#func capture_mouse():
+#	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+#	mouse_captured = true
+#
+#
+#func release_mouse():
+#	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+#	mouse_captured = false
 
 
 ## Checks if some Input Actions haven't been created.
@@ -199,3 +234,10 @@ func check_input_mappings():
 	if can_freefly and not InputMap.has_action(input_freefly):
 		push_error("Freefly disabled. No InputAction found for input_freefly: " + input_freefly)
 		can_freefly = false
+
+
+func _on_runner_tagged() -> void:
+	pass # Replace with function body.
+
+func _on_restart_game() -> void:
+	emit_signal("restart_game")
