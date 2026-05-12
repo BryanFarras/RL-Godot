@@ -44,8 +44,6 @@ func _on_restart_game() -> void:
 	reset()
 
 func restart_delay():
-	print("Restarting in 0.1 seconds...")
-	await get_tree().create_timer(0.1).timeout
 	emit_signal("restart_game")
 	reset()
 

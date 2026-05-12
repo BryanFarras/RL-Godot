@@ -28,13 +28,12 @@ theme_override_constants/margin_bottom = 50
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 4
 theme = ExtResource("2_5lxq6")
 fit_content = true
-horizontal_alignment = 1
 
 [node name="Timer" type="Timer" parent="MarginContainer" unique_id=1925684605]
 unique_name_in_owner = true
-wait_time = 6.0
+wait_time = 8.729999999999999
 one_shot = true

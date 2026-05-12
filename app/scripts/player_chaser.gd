@@ -234,10 +234,3 @@ func check_input_mappings():
 	if can_freefly and not InputMap.has_action(input_freefly):
 		push_error("Freefly disabled. No InputAction found for input_freefly: " + input_freefly)
 		can_freefly = false
-
-
-func _on_runner_tagged() -> void:
-	pass # Replace with function body.
-
-func _on_restart_game() -> void:
-	emit_signal("restart_game")

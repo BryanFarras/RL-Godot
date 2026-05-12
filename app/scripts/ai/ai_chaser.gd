@@ -5,22 +5,28 @@ extends AIController3D
 @onready var runner = get_node("../../player_runner")
 
 var last_distance = 0.0
+var distance_delta = 0.0  # positive = got closer this step
 var tagged = false
 
 func get_obs() -> Dictionary:
 	var chaser_pos = chaser_body.global_transform.origin
 	var runner_pos = runner.global_transform.origin
 	var diff = runner_pos - chaser_pos
-	last_distance = diff.length()
+	var current_distance = diff.length()
+	# Positive when chaser moved closer since last step
+	distance_delta = last_distance - current_distance
+	last_distance = current_distance
 	return {"obs": [chaser_pos.x, chaser_pos.y, chaser_pos.z, runner_pos.x, runner_pos.y, runner_pos.z, diff.x, diff.y, diff.z]}
 
 
 func get_reward() -> float:
-	# Reward: +1 for tagging, small negative per step to encourage speed
+	# Large reward for tagging the runner
 	if tagged:
 		tagged = false
-		return 1.0
-	return -0.01
+		return 10.0
+	# Shape reward: positive for closing distance, negative for moving away
+	# Scaled by 0.1 so step shaping stays well below the tag reward
+	return distance_delta * 0.1 - 0.01
 
 
 func get_action_space() -> Dictionary:

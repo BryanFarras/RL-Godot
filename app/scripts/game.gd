@@ -7,12 +7,13 @@ func _ready():
 	pass
 
 ## Called when the chaser presses the restart key.
-## Resets player positions, velocities, directions, and the timer.
+## Resets player positions, velocities, and directions.
 func _on_restart_game() -> void:
 	player_chaser.reset_state()
 	if player_runner and player_runner.has_method("reset_state"):
 		player_runner.reset_state()
 
+## Called by training.gd when the shared timer ends.
 func _on_timer_restart_game() -> void:
 	player_chaser.reset_state()
 	if player_runner and player_runner.has_method("reset_state"):

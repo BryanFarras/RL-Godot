@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c0q0vfwioth0t"]
 
 [ext_resource type="Script" uid="uid://c3fxfaguxwsxp" path="res://scripts/player_runner.gd" id="1_u0euo"]
+[ext_resource type="Script" uid="uid://bf0tiiakcp6fl" path="res://scripts/ai/ai_runner.gd" id="2_t03ob"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j5kkq"]
 albedo_color = Color(1, 0, 0, 1)
@@ -23,3 +24,7 @@ shape = SubResource("CapsuleShape3D_t03ob")
 
 [node name="Head" type="Node3D" parent="." unique_id=1352376104]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
+
+[node name="AI" type="Node3D" parent="." unique_id=1655207429]
+script = ExtResource("2_t03ob")
+metadata/_custom_type_script = "uid://by6nl5nh2n00n"
