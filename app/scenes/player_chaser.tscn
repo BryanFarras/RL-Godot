@@ -29,6 +29,6 @@ shape = SubResource("CapsuleShape3D_5l7i6")
 [node name="Head" type="Node3D" parent="." unique_id=1925523034]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
 
-[node name="AI" type="Node3D" parent="." unique_id=353958739]
+[node name="AIChaser" type="Node3D" parent="." unique_id=353958739]
 script = ExtResource("2_7ivy8")
 metadata/_custom_type_script = "uid://by6nl5nh2n00n"

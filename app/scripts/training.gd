@@ -4,6 +4,7 @@ extends Node
 @onready var score = $CanvasLayer/Scores
 
 var chasers: Array = []
+var runners: Array = []
 var games: Array = []
 
 func _ready():
@@ -21,12 +22,19 @@ func _ready():
 			push_error("Chaser not found in %s" % game_path)
 			continue
 		
+		var runner = game.get_node_or_null("player_runner")
+		if runner == null:
+			push_error("Runner not found in %s" % game_path)
+			continue
+		
 		chasers.append(chaser)
+		runners.append(runner)
 		games.append(game)
 	
 	print("Loaded %d games and chasers" % chasers.size())
 	
 	var main_chaser = chasers[0]
+	var main_runner = runners[0]
 	
 	# Connect all chasers to UI (any chaser tagging triggers reset)
 	for chaser in chasers:
@@ -41,6 +49,9 @@ func _ready():
 	# Connect timer to all chasers for synchronized resets
 	for chaser in chasers:
 		timer.restart_game.connect(chaser.reset_state)
+
+	for runner in runners:
+		timer.restart_game.connect(runner.reset_state)
 	
 	# Connect timer to all games for synchronized restarts
 	for game in games:

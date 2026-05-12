@@ -13,6 +13,8 @@ extends CharacterBody3D
 
 @export_group("Speeds")
 ## Normal speed.
+@export var look_speed : float = 0.002
+## Normal speed.
 @export var base_speed : float = 3.0
 
 ## Acceleration and drag
@@ -40,7 +42,10 @@ extends CharacterBody3D
 
 @export var restart : String = "restart"
 
+var mouse_captured : bool = false
+var look_rotation : Vector2
 var move_speed : float = 0.0
+var freeflying : bool = false
 
 ## AI-controlled input — set by ai_runner.gd each physics step.
 ## When non-zero the AI drives movement instead of keyboard input.
@@ -50,8 +55,12 @@ var ai_wants_jump : bool = false
 ## Spawn state — stored on _ready() and restored on reset.
 var _spawn_position : Vector3
 var _spawn_rotation : Vector3
+var _spawn_look_rotation : Vector2
 
 signal restart_game
+
+@onready var head: Node3D = $Head
+@onready var collider: CollisionShape3D = $CollisionShape3D
 
 var has_tagged := false
 
@@ -60,12 +69,39 @@ func _ready() -> void:
 	# Save spawn state for resets
 	_spawn_position = global_position
 	_spawn_rotation = rotation
-
+	_spawn_look_rotation = look_rotation
 func _unhandled_input(event: InputEvent) -> void:
+	
+	# Mouse capturing
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT): 
+		capture_mouse()
+	if Input.is_key_pressed(KEY_ESCAPE):
+		release_mouse()
+
 	# Restart round (preserves scores)
 	if InputMap.has_action(restart) and Input.is_action_just_pressed(restart):
 		reset_state()
 		emit_signal("restart_game")
+	
+	if mouse_captured and event is InputEventMouseMotion:
+		rotate_look(event.relative)
+
+func rotate_look(rot_input : Vector2):
+	look_rotation.x -= rot_input.y * look_speed
+	look_rotation.x = clamp(look_rotation.x, deg_to_rad(-85), deg_to_rad(85))
+	look_rotation.y -= rot_input.x * look_speed
+
+	rotation.y = look_rotation.y
+	head.rotation.x = look_rotation.x
+
+func capture_mouse():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	mouse_captured = true
+
+
+func release_mouse():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	mouse_captured = false
 
 func _physics_process(delta: float) -> void:
 	# Apply gravity to velocity
@@ -92,6 +128,8 @@ func _physics_process(delta: float) -> void:
 		if ai_move_dir != Vector3.ZERO:
 			# AI path: ai_move_dir is already a world-space unit vector
 			move_dir = ai_move_dir.normalized()
+			if move_dir.length() > 0:
+				print("[player_runner] using AI move_dir: ", move_dir, " speed: ", move_speed)
 		else:
 			# Player path: convert keyboard axes to world-space direction
 			var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
@@ -117,11 +155,13 @@ func _physics_process(delta: float) -> void:
 	# Use velocity to actually move
 	move_and_slide()
 
-## Resets position, velocity, and rotation to spawn state.
+## Resets position, velocity, and camera direction to spawn state.
 func reset_state() -> void:
 	global_position = _spawn_position
 	velocity = Vector3.ZERO
-	rotation = _spawn_rotation
+	look_rotation = _spawn_look_rotation
+	rotation.y = look_rotation.y
+	head.rotation.x = look_rotation.x
 	has_tagged = false
 
 

@@ -136,6 +136,8 @@ func _physics_process(delta: float) -> void:
 		if ai_move_dir != Vector3.ZERO:
 			# AI path: ai_move_dir is already a world-space unit vector
 			move_dir = ai_move_dir.normalized()
+			if move_dir.length() > 0:
+				print("[player_chaser] using AI move_dir: ", move_dir, " speed: ", move_speed)
 		else:
 			# Player path: convert keyboard axes to world-space direction
 			var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
