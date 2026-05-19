@@ -48,7 +48,6 @@ var move_speed : float = 0.0
 var freeflying : bool = false
 
 ## AI-controlled input — set by ai_runner.gd each physics step.
-## When non-zero the AI drives movement instead of keyboard input.
 var ai_move_dir : Vector3 = Vector3.ZERO
 var ai_wants_jump : bool = false
 
@@ -70,6 +69,7 @@ func _ready() -> void:
 	_spawn_position = global_position
 	_spawn_rotation = rotation
 	_spawn_look_rotation = look_rotation
+	
 func _unhandled_input(event: InputEvent) -> void:
 	
 	# Mouse capturing
@@ -121,6 +121,7 @@ func _physics_process(delta: float) -> void:
 		move_speed = sprint_speed
 	else:
 		move_speed = base_speed
+		
 
 	# Apply desired movement to velocity
 	if can_move:
@@ -128,8 +129,8 @@ func _physics_process(delta: float) -> void:
 		if ai_move_dir != Vector3.ZERO:
 			# AI path: ai_move_dir is already a world-space unit vector
 			move_dir = ai_move_dir.normalized()
-			if move_dir.length() > 0:
-				print("[player_runner] using AI move_dir: ", move_dir, " speed: ", move_speed)
+			# if move_dir.length() > 0:
+			# 	print("[player_runner] using AI move_dir: ", move_dir, " speed: ", move_speed)
 		else:
 			# Player path: convert keyboard axes to world-space direction
 			var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)

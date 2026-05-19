@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dad6png6kl53o"]
+
+[ext_resource type="Material" uid="uid://cs70wsueg1n0w" path="res://material/transparency_alpha.tres" id="1_jji5p"]
+[ext_resource type="Script" uid="uid://cv75tcg60dtb8" path="res://scripts/map_obstacle.gd" id="1_lk7cf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5kldx"]
+albedo_color = Color(0.13, 0.13, 0.13, 1)
+
+[node name="Map2" type="Node3D" unique_id=490250522]
+script = ExtResource("1_lk7cf")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1701567885]
+transform = Transform3D(-0.70008814, -0.39151418, 0.5971543, 0.1526086, 0.73492414, 0.660755, -0.69755805, 0.5537176, -0.45476323, 0.3000002, 4, 0.20000029)
+visible = false
+light_energy = 0.646
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="." unique_id=1590221283]
+use_collision = true
+size = Vector3(8, 0.1, 8)
+material = SubResource("StandardMaterial3D_5kldx")
+
+[node name="WallBound" type="Node3D" parent="." unique_id=142102122]
+
+[node name="Wall1" type="CSGBox3D" parent="WallBound" unique_id=1860138594]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.7, 4)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_jji5p")
+
+[node name="Wall2" type="CSGBox3D" parent="WallBound" unique_id=277485606]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.7, -4)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_jji5p")
+
+[node name="Wall3" type="CSGBox3D" parent="WallBound" unique_id=981600536]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.7, -1.7484555e-07)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_jji5p")
+
+[node name="Wall4" type="CSGBox3D" parent="WallBound" unique_id=990180635]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.7, 1.7484555e-07)
+use_collision = true
+size = Vector3(0.1, 1.3000001, 7.9)
+material = ExtResource("1_jji5p")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=46953620]
+
+[node name="Box1" type="CSGBox3D" parent="Node3D" unique_id=163008339]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8000001, 0.5, 0)
+use_collision = true
+size = Vector3(3.6000001, 1, 1)

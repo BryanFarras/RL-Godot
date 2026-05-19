@@ -1,0 +1,235 @@
+{
+  "kode_kelompok": "K12",
+  "topik_pilihan": 5,
+  "nama_topik": "Reinforcement Learning",
+  "judul_proyek": "Pelatihan Agen AI Runner dan Chaser pada Lingkungan 3D Kustom Godot Menggunakan Proximal Policy Optimization (PPO)",
+  "abstrak_singkat": "Proyek ini melatih agen Reinforcement Learning untuk peran Runner dan Chaser dalam permainan kejar-kejaran (tag game) berbasis 3D di Godot. Kami mengintegrasikan Godot Engine dengan framework Stable-Baselines3 (Python) menggunakan library godot-rl. Kedua agen dilengkapi dengan sensor RayCast3D (depan, belakang, kanan, kiri) untuk mendeteksi rintangan dinding secara dinamis. Agen Runner dilatih menggunakan Proximal Policy Optimization (PPO) dengan reward shaping untuk menjauhi Chaser (+10 saat bertahan hidup, -10 saat tertangkap), sedangkan agen Chaser melatih kebijakan untuk mendekati dan menangkap Runner (+10 saat berhasil menangkap). Hasil eksperimen menunjukkan bahwa integrasi sensor RayCast3D berhasil mencegah tabrakan dinding dan agen Runner mampu mempelajari rute pelarian yang efektif dibandingkan dengan baseline non-sensor.",
+
+  "metode_ai": [
+    {
+      "nama": "Proximal Policy Optimization (PPO)",
+      "peran": "utama",
+      "varian": "PPO-Clip dengan MultiInputPolicy (Stable-Baselines3) dan standard actor-critic MLP network",
+      "catatan": "Algoritma utama yang digunakan untuk melatih agen Runner dan Chaser agar belajar secara simultan/mandiri di dalam lingkungan simulasi 3D."
+    }
+  ],
+
+  "frameworks": [
+    {
+      "nama": "Godot Engine",
+      "versi": "4.x",
+      "kegunaan": "Game Engine untuk merancang lingkungan 3D, fisika pergerakan karakter, raycast sensor, dan simulasi realtime."
+    },
+    {
+      "nama": "Stable-Baselines3",
+      "versi": "2.x",
+      "kegunaan": "Implementasi algoritma Reinforcement Learning (PPO) yang robust dalam Python."
+    },
+    {
+      "nama": "godot-rl-agents",
+      "versi": "0.8.x",
+      "kegunaan": "Jembatan / wrapper yang menghubungkan lingkungan Godot Engine dengan API Gymnasium Python secara sinkron dan efisien."
+    },
+    {
+      "nama": "PyTorch",
+      "versi": "2.x",
+      "kegunaan": "Deep learning backend untuk training neural network actor-critic dalam Stable-Baselines3."
+    }
+  ],
+
+  "datasets": [
+    {
+      "nama": "Godot Tag Chase-v0 (Custom)",
+      "tipe": "environment_mandiri",
+      "sumber": "Dibangun secara mandiri oleh tim menggunakan Godot Engine 4 dan plugin godot-rl-agents.",
+      "url_sumber_publik": "",
+      "jumlah_sampel": 0,
+      "jumlah_kelas": 0,
+      "proses_akuisisi_mandiri": "Lingkungan simulasi multiplayer / multi-agent asimetris kustom yang dirancang di Godot. Terdiri dari 9 game arena paralel untuk mempercepat proses training (vectorized env). Runner menggunakan 4 sensor RayCast3D untuk deteksi dinding dengan visualisasi ray. Reset state mengembalikan posisi awal Chaser dan Runner setelah durasi putaran berakhir atau jika terjadi penandaan (tagging). Kode utama terintegrasi pada app/scenes/training.tscn dan diatur oleh script app/scripts/training.gd serta app/scripts/game.gd.",
+      "peran_di_proyek": "Environment utama untuk melatih dan menguji performa kebijakan Runner AI (AIRunner) dan Chaser AI (AIChaser).",
+      "spek_rl": {
+        "state_space": "Box(low=-inf, high=inf, shape=(13,)) - koordinat global Runner (3), koordinat global Chaser (3), vektor jarak relatif (3), dan panjang raycast 4 arah (4).",
+        "action_space": "move: continuous (size 2) [move_x, move_z] dan jump: discrete (size 1) [0 atau 1]",
+        "reward_function": "Runner: delta_jarak * 0.1 - 0.01 + 10.0 (survived) - 10.0 (tagged). Chaser: delta_jarak_pendekatan * 0.1 - 0.01 + 10.0 (tagging success).",
+        "max_episode_steps": 220,
+        "framework_env": "godot-rl-agents dengan API Gymnasium (StableBaselinesGodotEnv)",
+        "modifikasi_tim": "Desain logika reset sinkron menggunakan timer kustom, implementasi raycast spatial awareness untuk wall avoidance dinamis, serta integrasi multi-agent tag loop."
+      }
+    }
+  ],
+
+  "metrik_utama": [
+    "Cumulative Reward per Episode (Runner vs Chaser)",
+    "Survival Rate of Runner (persentase lolos hingga batas waktu)",
+    "Tagging Success Rate of Chaser (persentase berhasil menangkap)",
+    "Average Episode Length (panjang durasi bertahan sebelum tertangkap)",
+    "Collision Frequency with Walls (frekuensi menyentuh/menabrak dinding)"
+  ],
+  "klaim_bonus": [
+    "B1",
+    "B2"
+  ],
+
+  "anggota": [
+    {
+      "nama": "Muhammad Bryan Farras",
+      "npm": "2306230975",
+      "peran_utama": "Lead ML & Game Logic Developer (AI Training, Environment, Movement)",
+      "focus_area": [
+        "Implementasi logika gerakan player runner dan chaser (move_and_slide, ai_move_dir, jump handling)",
+        "Perancangan dan integrasi AI Controller untuk Runner dan Chaser dengan Godot RL Agents",
+        "Pembangunan environment training lengkap (reset state, timer, scoring, episode termination)",
+        "Integrasi Godot RL Agents dengan Stable-Baselines3 (wrapper, observation/reward shaping)",
+        "Implementasi model training dan inference pipeline (stable_baselines3_example.py, multi-arena paralel)",
+        "Penyusunan reward shaping dan observation space untuk kedua agen"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Godot CharacterBody3D movement & physics (move_and_slide, kinematic motion)",
+        "Signal-based game flow management (reset, tagging, survival, timer)",
+        "Multi-agent environment synchronization (9 parallel arena via godot-rl)",
+        "Stable-Baselines3 PPO: hyperparameter configuration, model saving/loading, vectorized env",
+        "Observation vector construction (koordinat global, jarak relatif, raycast distances)",
+        "AI Controller inheritance (AIController3D) dan implementasi get_obs/get_reward/set_action"
+      ],
+      "konsep_dikuasai_teori": [
+        "Markov Decision Process (MDP) dalam continuous action space dengan multi-agent interaction",
+        "Proximal Policy Optimization (PPO) objective function (clipping, advantage estimation)",
+        "Multi-Agent Reinforcement Learning (MARL) dynamics (asymmetric learning, reward shaping)",
+        "Reward shaping untuk exploration-exploitation tradeoff (survival vs tagging)",
+        "State representation menggunakan sensor RayCast3D untuk spatial awareness",
+        "Kinematic vs dynamic physics dalam simulasi agen RL"
+      ],
+      "bagian_laporan": [
+        "Bab II (Landasan Teori: PPO, MARL, Reward Shaping)",
+        "Bab III (Implementasi Sistem: Environment, Movement Logic, AI Controller, Training Pipeline)",
+        "Bab IV (Hasil Eksperimen & Analisis: Reward curves, survival rate, wall avoidance)"
+      ],
+      "bagian_kode": [
+        "stable_baselines3_example.py",
+        "app/scripts/ai/ai_runner.gd",
+        "app/scripts/ai/ai_chaser.gd",
+        "app/scripts/player_runner.gd",
+        "app/scripts/player_chaser.gd",
+        "app/scripts/training.gd",
+        "app/scripts/game.gd"
+      ]
+    },
+    {
+      "nama": "[Nama Anggota 2 - Silakan Isi Di Sini]",
+      "npm": "[NPM Anggota 2 - Silakan Isi Di Sini]",
+      "peran_utama": "Godot Scene & Sensor Developer",
+      "focus_area": [
+        "Pembuatan scene 3D Godot (game arena, player runner, player chaser)",
+        "Konfigurasi sensor RayCast3D untuk dynamic wall avoidance",
+        "Implementasi reset dan restart state pada player scripts",
+        "Manajemen sinkronisasi timer dan restart signals"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Godot 3D physics dan kinematics (CharacterBody3D, move_and_slide)",
+        "Konfigurasi RayCast3D spatial query programmatically",
+        "Koneksi dan propagasi Godot signals untuk sinkronisasi putaran game",
+        "Penyusunan UI timer dan panel skor"
+      ],
+      "konsep_dikuasai_teori": [
+        "State representation dalam MDP (Spatial awareness vs raw coordinates)",
+        "Sistem koordinat 3D (World space vs Local space transformations)",
+        "Kinematic physics vs dynamic physics dalam simulasi agen",
+        "Signal-based decoupled architecture dalam game development"
+      ],
+      "bagian_laporan": [
+        "Bab III.1 (Desain Scene & Game Elements)",
+        "Bab III.3 (Integrasi Sensor RayCast3D)"
+      ],
+      "bagian_kode": [
+        "app/scripts/player_runner.gd",
+        "app/scripts/player_chaser.gd",
+        "app/scripts/timer.gd",
+        "app/scripts/training.gd"
+      ]
+    },
+    {
+      "nama": "[Nama Anggota 3 - Silakan Isi Di Sini]",
+      "npm": "[NPM Anggota 3 - Silakan Isi Di Sini]",
+      "peran_utama": "Experimenter & Report Writer",
+      "focus_area": [
+        "Hyperparameter tuning untuk PPO (learning rate, n_steps, batch_size)",
+        "Pengumpulan log tensorboard dan evaluasi model",
+        "Uji coba fungsionalitas game restart dan tracking performa",
+        "Analisis pengaruh raycast sensor terhadap wall avoidance"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Tensorboard log visualization & convergence assessment",
+        "Model evaluation dengan inference mode (--inference)",
+        "Uji coba robustness agen terhadap pergerakan tak terduga",
+        "Command line argument parsing untuk parameter kustom"
+      ],
+      "konsep_dikuasai_teori": [
+        "Sample complexity vs training efficiency dalam RL",
+        "Bias-variance tradeoff dalam model-free RL algorithms",
+        "Generalisasi kebijakan (policy generalization) pada peta baru",
+        "Metrik evaluasi RL (Mean reward, episode length, survival rate)"
+      ],
+      "bagian_laporan": [
+        "Bab IV (Analisis Hasil Training)",
+        "Bab V (Kesimpulan dan Saran)"
+      ],
+      "bagian_kode": [
+        "commands.txt",
+        "app/scripts/game.gd",
+        "app/scripts/scores.gd"
+      ]
+    },
+    {
+      "nama": "[Nama Anggota 4 - Silakan Isi Di Sini]",
+      "npm": "[NPM Anggota 4 - Silakan Isi Di Sini]",
+      "peran_utama": "Experimenter & Report Writer",
+      "focus_area": [
+        "Hyperparameter tuning untuk PPO (learning rate, n_steps, batch_size)",
+        "Pengumpulan log tensorboard dan evaluasi model",
+        "Uji coba fungsionalitas game restart dan tracking performa",
+        "Analisis pengaruh raycast sensor terhadap wall avoidance"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Tensorboard log visualization & convergence assessment",
+        "Model evaluation dengan inference mode (--inference)",
+        "Uji coba robustness agen terhadap pergerakan tak terduga",
+        "Command line argument parsing untuk parameter kustom"
+      ],
+      "konsep_dikuasai_teori": [
+        "Sample complexity vs training efficiency dalam RL",
+        "Bias-variance tradeoff dalam model-free RL algorithms",
+        "Generalisasi kebijakan (policy generalization) pada peta baru",
+        "Metrik evaluasi RL (Mean reward, episode length, survival rate)"
+      ],
+      "bagian_laporan": [
+        "Bab IV (Analisis Hasil Training)",
+        "Bab V (Kesimpulan dan Saran)"
+      ],
+      "bagian_kode": [
+        "commands.txt",
+        "app/scripts/game.gd",
+        "app/scripts/scores.gd"
+      ]
+    }
+  ],
+
+  "tautan": {
+    "github": "https://github.com/BryanFarras/RL-Godot",
+    "colab": "",
+    "dataset_mandiri": null,
+    "video_demo": null
+  },
+
+  "ai_assistant_usage": {
+    "digunakan": true,
+    "tools": [
+      "Gemini 3 Flash"
+    ],
+    "bagian": [
+      "Penyusunan sensor RayCast3D kustom untuk deteksi dinding pada script ai_runner.gd",
+      "Penyelesaian masalah sinkronisasi timer dan restart signal di training.gd",
+      "Pembuatan file metadata proyek sesuai template"
+    ],
+    "estimasi_persentase": 15
+  }
+}

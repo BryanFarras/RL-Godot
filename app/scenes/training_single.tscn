@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cirroti63bi4u"]
+
+[ext_resource type="PackedScene" uid="uid://chgvssjkr22b2" path="res://scenes/game.tscn" id="1_vsdwu"]
+[ext_resource type="Script" uid="uid://dmhpgjhox5g65" path="res://addons/godot_rl_agents/sync.gd" id="2_op05e"]
+[ext_resource type="PackedScene" uid="uid://dj86unblfoqvc" path="res://scenes/timer.tscn" id="3_re5n1"]
+[ext_resource type="PackedScene" uid="uid://cn2piwj68yf4g" path="res://scenes/scores.tscn" id="4_r23pa"]
+
+[node name="training_single" type="Node" unique_id=1582484491]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1051850563]
+transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.70710677, 0, -0.70710677, 0.7071067, 0, 10, 0)
+
+[node name="Game" parent="." unique_id=1768057768 instance=ExtResource("1_vsdwu")]
+
+[node name="Sync" type="Node" parent="." unique_id=667274016]
+script = ExtResource("2_op05e")
+metadata/_custom_type_script = "uid://dmhpgjhox5g65"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1954809810]
+
+[node name="Timer" parent="CanvasLayer" unique_id=1856813160 instance=ExtResource("3_re5n1")]
+mouse_filter = 2
+
+[node name="Scores" parent="CanvasLayer" unique_id=1370206219 instance=ExtResource("4_r23pa")]
