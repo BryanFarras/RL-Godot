@@ -49,6 +49,21 @@ material = ExtResource("2_8gtt8")
 [node name="Node3D" type="Node3D" parent="." unique_id=46953620]
 
 [node name="Box1" type="CSGBox3D" parent="Node3D" unique_id=163008339]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 2.5)
+use_collision = true
+size = Vector3(3.6000001, 1, 0.2)
+
+[node name="Box2" type="CSGBox3D" parent="Node3D" unique_id=1529559068]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -2.5)
+use_collision = true
+size = Vector3(3.6000001, 1, 0.2)
+
+[node name="Box3" type="CSGBox3D" parent="Node3D" unique_id=18163885]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5, 0.5, 0)
+use_collision = true
+size = Vector3(3.6000001, 1, 0.2)
+
+[node name="Box4" type="CSGBox3D" parent="Node3D" unique_id=433040743]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 0.5, 0)
 use_collision = true
 size = Vector3(3.6000001, 1, 0.2)

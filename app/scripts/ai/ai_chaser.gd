@@ -44,15 +44,9 @@ func get_reward() -> float:
 	if tagged:
 		tagged = false
 		return 10.0
-		
-	var reward = distance_delta * 0.1 - 0.01
-	
-	# Shape reward: small penalty for getting too close to walls
-	for ray in [ray_front, ray_back, ray_right, ray_left]:
-		if ray.is_colliding():
-			reward -= 0.02 # encourage the AI to stay in open areas
-			
-	return reward
+	# Shape reward: positive for closing distance, negative for moving away
+	# Scaled by 0.1 so step shaping stays well below the tag reward
+	return distance_delta * 0.1 - 0.01
 
 
 func get_action_space() -> Dictionary:
@@ -82,66 +76,53 @@ func set_action(action) -> void:
 	var move_x : float = action["move"][0]
 	var move_z : float = action["move"][1]
 	
-	var final_move = Vector3(move_x, 0, move_z)
+	var desired_move = Vector3(move_x, 0, move_z)
 	
-	# Convert world move to local space
-	var local_move = chaser_body.global_transform.basis.inverse() * final_move
+	if desired_move.length() < 0.01:
+		chaser_body.ai_move_dir = Vector3.ZERO
+		return
+		
+	# Calculate repulsive forces from raycasts in world space
+	var repulsion = Vector3.ZERO
+	var rays = [
+		{"node": ray_front, "local_dir": Vector3(0, 0, -1)},
+		{"node": ray_back, "local_dir": Vector3(0, 0, 1)},
+		{"node": ray_right, "local_dir": Vector3(1, 0, 0)},
+		{"node": ray_left, "local_dir": Vector3(-1, 0, 0)},
+	]
 	
-	var chaser_pos = chaser_body.global_transform.origin
-	var runner_pos = runner.global_transform.origin
-	var to_runner_local = chaser_body.global_transform.basis.inverse() * (runner_pos - chaser_pos)
-	
-	# Check blockages
-	var blocked_front = ray_front.is_colliding()
-	var blocked_back = ray_back.is_colliding()
-	var blocked_right = ray_right.is_colliding()
-	var blocked_left = ray_left.is_colliding()
-	
-	# Determine if the desired movement directions are blocked
-	var want_forward = local_move.z < -0.1
-	var want_backward = local_move.z > 0.1
-	var want_right = local_move.x > 0.1
-	var want_left = local_move.x < -0.1
-	
-	var z_blocked = (want_forward and blocked_front) or (want_backward and blocked_back)
-	var x_blocked = (want_right and blocked_right) or (want_left and blocked_left)
-	
-	if z_blocked and x_blocked:
-		# Corner/Dead-end! Both desired directions are blocked.
-		# We must backtrack/steer away from the corner.
-		if want_forward and not blocked_back:
-			local_move.z = 1.0 # Escape by backing up
-		elif want_backward and not blocked_front:
-			local_move.z = -1.0 # Escape by going forward
-		else:
-			local_move.z = 0
+	for ray_info in rays:
+		var ray = ray_info["node"]
+		if ray.is_colliding():
+			var col_point = ray.get_collision_point()
+			var dist = ray.global_position.distance_to(col_point)
+			dist = max(dist, 0.1) # Avoid division by zero
 			
-		if want_right and not blocked_left:
-			local_move.x = -1.0 # Escape by going left
-		elif want_left and not blocked_right:
-			local_move.x = 1.0 # Escape by going right
-		else:
-			local_move.x = 0
+			# Hyperbolic weight: (max_range - dist) / dist
+			var weight = (2.0 - dist) / dist
+			var world_dir = chaser_body.global_transform.basis * ray_info["local_dir"]
+			world_dir = world_dir.normalized()
 			
-	elif z_blocked:
-		# Only Z is blocked, slide along X
-		local_move.z = 0
-		if abs(local_move.x) < 0.1:
-			local_move.x = 1.0 if to_runner_local.x > 0 else -1.0 # run towards runner
-		else:
-			local_move.x = sign(local_move.x) * 1.0
+			# Add repulsive force (opposite to the ray direction)
+			repulsion += -world_dir * weight * 1.5
 			
-	elif x_blocked:
-		# Only X is blocked, slide along Z
-		local_move.x = 0
-		if abs(local_move.z) < 0.1:
-			local_move.z = 1.0 if to_runner_local.z > 0 else -1.0 # run towards runner
-		else:
-			local_move.z = sign(local_move.z) * 1.0
-			
-	final_move = chaser_body.global_transform.basis * local_move
+	var final_move = desired_move + repulsion
 	
-	chaser_body.ai_move_dir = final_move
+	# If we are close to a wall, project the runner direction onto the tangent of the wall
+	if repulsion.length() > 0.5:
+		var chaser_pos = chaser_body.global_transform.origin
+		var runner_pos = runner.global_transform.origin
+		var to_runner = (runner_pos - chaser_pos).normalized()
+		
+		# Wall normal vector pointing out of the wall (away from obstacle)
+		var wall_normal = -repulsion.normalized()
+		
+		# Project to_runner onto the plane perpendicular to the wall normal (tangent)
+		var tangent = to_runner - to_runner.project(wall_normal)
+		if tangent.length() > 0.1:
+			final_move = final_move.lerp(tangent.normalized() * desired_move.length(), 0.6)
+			
+	chaser_body.ai_move_dir = final_move.normalized() * desired_move.length()
 	# print("[ai_chaser] set_action - move: ", Vector2(move_x, move_z), " ai_move_dir: ", chaser_body.ai_move_dir)
 
 	# --- Jump ---
