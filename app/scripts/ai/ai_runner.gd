@@ -44,18 +44,16 @@ func set_action(action) -> void:
 		push_error("Invalid action format. Expected 'move' and 'jump' keys. Got: ", action.keys())
 		return
 
-	# --- Movement ---
 	# action["move"] is a 2-element array [move_x, move_z] in world space.
 	# We write into ai_move_dir which _physics_process reads instead of keyboard input.
 	var move_x : float = action["move"][0]
 	var move_z : float = action["move"][1]
 	player_runner.ai_move_dir = Vector3(move_x, 0, move_z)
-	print("[ai_runner] set_action - move: ", Vector2(move_x, move_z), " ai_move_dir: ", player_runner.ai_move_dir)
+	# print("[ai_runner] set_action - move: ", Vector2(move_x, move_z), " ai_move_dir: ", player_runner.ai_move_dir)
 
-	# --- Jump ---
 	# action["jump"] is a discrete float (0.0 = no jump, 1.0 = jump).
 	# ai_wants_jump is consumed (cleared) after one physics frame.
 	var wants_jump : bool = action["jump"] == 1
 	if wants_jump:
 		player_runner.ai_wants_jump = true
-		print("[ai_runner] jump requested")
+		# print("[ai_runner] jump requested")

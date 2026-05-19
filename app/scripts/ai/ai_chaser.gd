@@ -56,7 +56,7 @@ func set_action(action) -> void:
 	var move_x : float = action["move"][0]
 	var move_z : float = action["move"][1]
 	chaser_body.ai_move_dir = Vector3(move_x, 0, move_z)
-	print("[ai_chaser] set_action - move: ", Vector2(move_x, move_z), " ai_move_dir: ", chaser_body.ai_move_dir)
+	# print("[ai_chaser] set_action - move: ", Vector2(move_x, move_z), " ai_move_dir: ", chaser_body.ai_move_dir)
 
 	# --- Jump ---
 	# action["jump"] is a discrete float (0.0 = no jump, 1.0 = jump).
@@ -64,7 +64,7 @@ func set_action(action) -> void:
 	var wants_jump : bool = action["jump"] == 1
 	if wants_jump:
 		chaser_body.ai_wants_jump = true
-		print("[ai_chaser] jump requested")
+		# print("[ai_chaser] jump requested")
 
 # Call this from the chaser script when tagging occurs:
 func on_tagged():
