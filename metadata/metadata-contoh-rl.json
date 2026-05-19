@@ -1,0 +1,210 @@
+{
+  "kode_kelompok": "K12",
+  "topik_pilihan": 5,
+  "nama_topik": "Reinforcement Learning",
+  "judul_proyek": "Optimisasi Kebijakan Manajemen Inventori dengan PPO pada Custom Gymnasium Environment",
+  "abstrak_singkat": "Proyek ini melatih agen Proximal Policy Optimization (PPO) untuk menentukan kebijakan reorder pada problem manajemen inventori multi-produk. Kami membangun custom Gymnasium environment 'InventoryControl-v0' yang mensimulasikan stochastic demand dan lead time, lalu membandingkan PPO (utama) dengan REINFORCE (baseline) dan kebijakan heuristic (s,S). PPO mencapai cumulative reward 1247.3 ± 42.1 vs REINFORCE 891.6 ± 78.4 dan heuristic 980.2 selama 500 episode evaluasi. Validitas implementasi diverifikasi via sanity check pada CartPole-v1.",
+
+  "metode_ai": [
+    {
+      "nama": "Proximal Policy Optimization (PPO)",
+      "peran": "utama",
+      "varian": "PPO-Clip dengan separate actor-critic MLP (2 hidden layer x 64 unit, tanh), GAE-Lambda 0.95",
+      "catatan": "Algoritma utama yang dilaporkan sebagai hasil terbaik. Implementasi mengikuti CleanRL dengan modifikasi tim untuk multi-discrete action."
+    },
+    {
+      "nama": "REINFORCE",
+      "peran": "baseline",
+      "varian": "Vanilla policy gradient dengan baseline state-value (Monte Carlo return)",
+      "catatan": "Pembanding untuk klaim bonus B1. Menunjukkan superioritas PPO pada problem high-variance."
+    },
+    {
+      "nama": "Heuristic (s,S) policy",
+      "peran": "pembanding",
+      "varian": "Non-learning baseline; reorder ketika stok < s, pesan hingga level S. Parameter (s,S) di-tune via grid search.",
+      "catatan": "Pembanding non-ML untuk konteks domain (klaim B1)."
+    }
+  ],
+
+  "frameworks": [
+    {
+      "nama": "PyTorch",
+      "versi": "2.1",
+      "kegunaan": "Implementasi actor-critic network & training loop"
+    },
+    {
+      "nama": "Gymnasium",
+      "versi": "0.29",
+      "kegunaan": "Interface environment standar (custom env mengikuti Gym API)"
+    },
+    {
+      "nama": "Stable-Baselines3",
+      "versi": "2.3",
+      "kegunaan": "Referensi implementasi PPO untuk sanity check"
+    },
+    {
+      "nama": "Weights & Biases",
+      "versi": "0.17",
+      "kegunaan": "Tracking eksperimen & hyperparameter sweep"
+    }
+  ],
+
+  "datasets": [
+    {
+      "nama": "InventoryControl-v0 (Custom)",
+      "tipe": "environment_mandiri",
+      "sumber": "Dibangun tim mengikuti formulasi MDP klasik (s,S) inventory dari Puterman (1994)",
+      "url_sumber_publik": "",
+      "jumlah_sampel": 0,
+      "jumlah_kelas": 0,
+      "proses_akuisisi_mandiri": "Environment dibangun tim dari nol mengikuti Gymnasium API. Mensimulasikan 3 produk dengan stochastic demand Poisson(lambda_i) dan stochastic lead time Geometric(p_i). State terdiri atas: stok saat ini, demand backlog, dan in-transit orders. Action: jumlah reorder per produk (multi-discrete). Reward: revenue - holding_cost - backlog_cost - fixed_order_cost. Implementasi di src/envs/inventory_control.py (450 LOC), divalidasi via unit test (test_inventory_env.py) dan visualisasi rollout heuristic.",
+      "peran_di_proyek": "Environment utama untuk training PPO & evaluasi kebijakan. Mendukung klaim bonus B2.",
+      "spek_rl": {
+        "state_space": "Box(low=0, high=200, shape=(9,)) - 3 produk x [stok, backlog, in-transit]",
+        "action_space": "MultiDiscrete([21, 21, 21]) - reorder quantity 0..20 per produk",
+        "reward_function": "revenue(sales) - 0.5*holding_cost - 3.0*backlog_cost - 10.0*fixed_order_cost; di-clip ke [-100, 100]",
+        "max_episode_steps": 200,
+        "framework_env": "Gymnasium 0.29 (custom subclass)",
+        "modifikasi_tim": "Seluruh logic environment dibangun tim. Parameter cost & demand dikalibrasi terhadap data fiktif yang representatif (dijelaskan di Bab III.1 laporan)."
+      }
+    },
+    {
+      "nama": "CartPole-v1",
+      "tipe": "environment",
+      "sumber": "Gymnasium (Classic Control)",
+      "url_sumber_publik": "https://gymnasium.farama.org/environments/classic_control/cart_pole/",
+      "jumlah_sampel": 0,
+      "jumlah_kelas": 0,
+      "proses_akuisisi_mandiri": "",
+      "peran_di_proyek": "Sanity check implementasi PPO sebelum diaplikasikan ke custom env. Hasil: konvergen ke return 500 dalam ~50k timestep, konsisten dengan literatur.",
+      "spek_rl": {
+        "state_space": "Box(4,) - [cart_pos, cart_vel, pole_angle, pole_vel]",
+        "action_space": "Discrete(2) - [push_left, push_right]",
+        "reward_function": "+1 per timestep alive (default Gymnasium, tidak dimodifikasi)",
+        "max_episode_steps": 500,
+        "framework_env": "Gymnasium 0.29",
+        "modifikasi_tim": ""
+      }
+    }
+  ],
+
+  "metrik_utama": [
+    "Cumulative reward per episode (mean ± std)",
+    "Sample efficiency (timesteps to convergence)",
+    "Final policy performance vs heuristic baseline",
+    "Stability across 5 seed (variance of final return)"
+  ],
+
+  "klaim_bonus": ["B1", "B2"],
+
+  "anggota": [
+    {
+      "nama": "Dewi Anggraini",
+      "npm": "2106111111",
+      "peran_utama": "Environment Engineer & Domain Modeler",
+      "focus_area": [
+        "Desain MDP inventory control",
+        "Implementasi custom Gymnasium environment",
+        "Kalibrasi parameter cost & demand",
+        "Unit testing environment"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Gymnasium API: reset(), step(), Box & MultiDiscrete space",
+        "Implementasi MDP klasik (state transition, reward function)",
+        "Stochastic process: Poisson demand, Geometric lead time",
+        "Unit test environment dengan pytest"
+      ],
+      "konsep_dikuasai_teori": [
+        "Definisi formal MDP (state, action, reward, transition, discount)",
+        "Markov property & justifikasi state representation",
+        "Reward shaping vs reward sparsity",
+        "(s,S) inventory policy & motivasi klasik dari literatur OR"
+      ],
+      "bagian_laporan": ["Bab II.2 (formulasi MDP)", "Bab III.1 (deskripsi environment)"],
+      "bagian_kode": [
+        "src/envs/inventory_control.py",
+        "tests/test_inventory_env.py",
+        "notebooks/01_env_visualization.ipynb"
+      ]
+    },
+    {
+      "nama": "Eko Prasetyo",
+      "npm": "2106122222",
+      "peran_utama": "RL Algorithm Engineer",
+      "focus_area": [
+        "Implementasi PPO & REINFORCE",
+        "Actor-critic network design",
+        "Hyperparameter tuning",
+        "Training pipeline"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "PPO-Clip objective dengan clip_ratio = 0.2",
+        "Generalized Advantage Estimation (GAE-Lambda)",
+        "Actor-critic shared vs separate network",
+        "Multi-discrete action sampling dengan masking",
+        "Vectorized environment untuk paralelisasi (8 env)"
+      ],
+      "konsep_dikuasai_teori": [
+        "Policy gradient theorem & turunannya",
+        "Trust region motivation: TRPO -> PPO",
+        "Bias-variance tradeoff dalam advantage estimation",
+        "Entropy regularization untuk eksplorasi",
+        "Mengapa PPO lebih stabil dari REINFORCE pada high-variance reward"
+      ],
+      "bagian_laporan": ["Bab II.3 (justifikasi PPO)", "Bab III.2 (konfigurasi)", "Bab III.5 (HP tuning)"],
+      "bagian_kode": [
+        "src/algorithms/ppo.py",
+        "src/algorithms/reinforce.py",
+        "src/networks/actor_critic.py",
+        "src/train.py"
+      ]
+    },
+    {
+      "nama": "Fajar Nugraha",
+      "npm": "2106133333",
+      "peran_utama": "Evaluator & Report Writer",
+      "focus_area": [
+        "Evaluation protocol (multi-seed)",
+        "Perbandingan vs heuristic baseline",
+        "Visualisasi learning curve",
+        "Penyusunan laporan"
+      ],
+      "konsep_dikuasai_implementasi": [
+        "Multi-seed evaluation (5 seed, 100 episode masing-masing)",
+        "Statistical reporting: mean, std, confidence interval bootstrap",
+        "Implementasi (s,S) heuristic policy dengan grid search",
+        "Visualisasi reward curve dengan matplotlib & wandb"
+      ],
+      "konsep_dikuasai_teori": [
+        "Pitfall evaluation RL: single-seed reporting & cherry-picking",
+        "Sample complexity vs asymptotic performance",
+        "Mengapa cumulative reward kurang informatif tanpa konteks horizon",
+        "Konsep regret terhadap optimal policy"
+      ],
+      "bagian_laporan": ["Bab III.3", "Bab III.4", "Bab III.6", "Bab III.7", "Bab V"],
+      "bagian_kode": [
+        "src/evaluation/",
+        "src/baselines/heuristic_ss.py",
+        "notebooks/03_eval_analysis.ipynb"
+      ]
+    }
+  ],
+
+  "tautan": {
+    "github": "https://github.com/k12-ai-uas/ppo-inventory-control",
+    "colab": "https://colab.research.google.com/drive/2bCdEfGhIjKlMnO1pQrStUvWxYz",
+    "dataset_mandiri": "https://github.com/k12-ai-uas/ppo-inventory-control/tree/main/src/envs",
+    "video_demo": null
+  },
+
+  "ai_assistant_usage": {
+    "digunakan": true,
+    "tools": ["Claude Opus 4.7"],
+    "bagian": [
+      "Debugging vectorized environment yang stuck pada terminal step",
+      "Drafting paragraf perbandingan TRPO vs PPO di related work",
+      "Review formulasi reward function untuk konsistensi sign convention"
+    ],
+    "estimasi_persentase": 10
+  }
+}

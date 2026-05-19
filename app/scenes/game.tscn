@@ -11,10 +11,10 @@ script = ExtResource("1_iywne")
 [node name="Map1" parent="." unique_id=826070910 instance=ExtResource("1_yqjtg")]
 
 [node name="player_chaser" parent="." unique_id=405912350 instance=ExtResource("2_lnu2h")]
-transform = Transform3D(-0.17677668, 0, -0.1767767, 0, 0.25, 0, 0.1767767, 0, -0.17677668, -2.0052693, 0.5, -1.9969096)
+transform = Transform3D(-0.17677668, 0, -0.1767767, 0, 0.25, 0, 0.1767767, 0, -0.17677668, -3.4052691, 0.5, -3.3969097)
 floor_stop_on_slope = false
 
 [node name="player_runner" parent="." unique_id=1812147695 instance=ExtResource("3_lnu2h")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 2.0212271, 0.5, 2.0001023)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 3.321227, 0.5, 3.3001022)
 
 [connection signal="restart_game" from="player_chaser" to="." method="_on_restart_game"]

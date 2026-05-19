@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6dousm4kaxdf" path="res://scripts/player_chaser.gd" id="1_5l7i6"]
 [ext_resource type="Script" uid="uid://cuyja4l36kxlb" path="res://scripts/ai/ai_chaser.gd" id="2_7ivy8"]
+[ext_resource type="Script" uid="uid://cnhcshk4y5iha" path="res://scripts/raycast_global.gd" id="3_u27yf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5l7i6"]
 albedo_color = Color(0, 0, 1, 1)
@@ -32,3 +33,29 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
 [node name="AIChaser" type="Node3D" parent="." unique_id=353958739]
 script = ExtResource("2_7ivy8")
 metadata/_custom_type_script = "uid://by6nl5nh2n00n"
+
+[node name="Sensors" type="Node3D" parent="." unique_id=637056925]
+
+[node name="RayFront" type="RayCast3D" parent="Sensors" unique_id=2026226057]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
+target_position = Vector3(0, 0, -2)
+debug_shape_custom_color = Color(0, 1, 0, 1)
+script = ExtResource("3_u27yf")
+
+[node name="RayBack" type="RayCast3D" parent="Sensors" unique_id=1602975566]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
+target_position = Vector3(0, 0, 2)
+debug_shape_custom_color = Color(0, 1, 0, 1)
+script = ExtResource("3_u27yf")
+
+[node name="RayRight" type="RayCast3D" parent="Sensors" unique_id=1856476741]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
+target_position = Vector3(2, 0, 0)
+debug_shape_custom_color = Color(0, 1, 0, 1)
+script = ExtResource("3_u27yf")
+
+[node name="RayLeft" type="RayCast3D" parent="Sensors" unique_id=637288612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
+target_position = Vector3(-2, 0, 0)
+debug_shape_custom_color = Color(0, 1, 0, 1)
+script = ExtResource("3_u27yf")

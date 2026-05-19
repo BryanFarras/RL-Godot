@@ -1,0 +1,40 @@
+{
+  "_keterangan": "Berkas referensi (kamus lookup) untuk semua field enum / nilai berbatas di metadata.json. Berkas ini TIDAK DIKUMPULKAN bersama submisi — hanya alat bantu saat mengisi metadata-template.json. Setiap key di bawah adalah path field di metadata; nilainya adalah daftar pilihan valid untuk field tersebut. Untuk penjelasan semantik setiap pilihan, baca Template Metadata Proyek (JSON).md.",
+
+  "topik_pilihan": {
+    "1": "CNN",
+    "2": "RNN / GRU / LSTM",
+    "3": "GNN",
+    "4": "Transformer",
+    "5": "Reinforcement Learning"
+  },
+
+  "datasets[].tipe": [
+    "publik",
+    "mandiri",
+    "hibrida",
+    "environment",
+    "environment_modifikasi",
+    "environment_mandiri"
+  ],
+
+  "metode_ai[].peran": [
+    "utama",
+    "baseline",
+    "pembanding",
+    "tahap_1",
+    "tahap_2"
+  ],
+
+  "klaim_bonus": [
+    "B1",
+    "B2",
+    "B3"
+  ],
+
+  "ai_assistant_usage.estimasi_persentase": {
+    "tipe": "integer",
+    "rentang": "0-100",
+    "deskripsi": "Estimasi persentase output (kode/teks) yang berasal dari AI assistant"
+  }
+}

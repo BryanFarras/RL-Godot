@@ -52,6 +52,7 @@ func _ready():
 
 	for runner in runners:
 		timer.restart_game.connect(runner.reset_state)
+		timer.runner_survived.connect(runner.get_node("AIRunner").on_survived)
 	
 	# Connect timer to all games for synchronized restarts
 	for game in games:
