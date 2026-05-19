@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dya444fk3nsux"]
+
+[ext_resource type="PackedScene" uid="uid://dad6png6kl53o" path="res://scenes/map2.tscn" id="1_1oiof"]
+[ext_resource type="Script" uid="uid://cbba6apgcsv2u" path="res://scripts/game.gd" id="1_3sm6k"]
+[ext_resource type="PackedScene" uid="uid://h06g2ay66ikn" path="res://scenes/player_chaser.tscn" id="2_3sm6k"]
+[ext_resource type="PackedScene" uid="uid://c0q0vfwioth0t" path="res://scenes/player_runner.tscn" id="3_wgl31"]
+
+[node name="Game2" type="Node3D" unique_id=491859139]
+script = ExtResource("1_3sm6k")
+
+[node name="Map2" parent="." unique_id=490250522 instance=ExtResource("1_1oiof")]
+
+[node name="player_chaser" parent="." unique_id=866426251 instance=ExtResource("2_3sm6k")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -3, 0.31227577, -3)
+
+[node name="player_runner" parent="." unique_id=1926211280 instance=ExtResource("3_wgl31")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 3, 0.31227577, 3)

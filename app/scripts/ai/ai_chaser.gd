@@ -44,9 +44,15 @@ func get_reward() -> float:
 	if tagged:
 		tagged = false
 		return 10.0
-	# Shape reward: positive for closing distance, negative for moving away
-	# Scaled by 0.1 so step shaping stays well below the tag reward
-	return distance_delta * 0.1 - 0.01
+		
+	var reward = distance_delta * 0.1 - 0.01
+	
+	# Shape reward: small penalty for getting too close to walls
+	for ray in [ray_front, ray_back, ray_right, ray_left]:
+		if ray.is_colliding():
+			reward -= 0.02 # encourage the AI to stay in open areas
+			
+	return reward
 
 
 func get_action_space() -> Dictionary:
@@ -85,36 +91,51 @@ func set_action(action) -> void:
 	var runner_pos = runner.global_transform.origin
 	var to_runner_local = chaser_body.global_transform.basis.inverse() * (runner_pos - chaser_pos)
 	
-	# Wall avoidance logic for chaser (chasing the runner)
-	# Front wall (-Z)
-	if ray_front.is_colliding() and local_move.z < 0:
+	# Check blockages
+	var blocked_front = ray_front.is_colliding()
+	var blocked_back = ray_back.is_colliding()
+	var blocked_right = ray_right.is_colliding()
+	var blocked_left = ray_left.is_colliding()
+	
+	# Determine if the desired movement directions are blocked
+	var want_forward = local_move.z < -0.1
+	var want_backward = local_move.z > 0.1
+	var want_right = local_move.x > 0.1
+	var want_left = local_move.x < -0.1
+	
+	var z_blocked = (want_forward and blocked_front) or (want_backward and blocked_back)
+	var x_blocked = (want_right and blocked_right) or (want_left and blocked_left)
+	
+	if z_blocked and x_blocked:
+		# Corner/Dead-end! Both desired directions are blocked.
+		# We must backtrack/steer away from the corner.
+		if want_forward and not blocked_back:
+			local_move.z = 1.0 # Escape by backing up
+		elif want_backward and not blocked_front:
+			local_move.z = -1.0 # Escape by going forward
+		else:
+			local_move.z = 0
+			
+		if want_right and not blocked_left:
+			local_move.x = -1.0 # Escape by going left
+		elif want_left and not blocked_right:
+			local_move.x = 1.0 # Escape by going right
+		else:
+			local_move.x = 0
+			
+	elif z_blocked:
+		# Only Z is blocked, slide along X
 		local_move.z = 0
 		if abs(local_move.x) < 0.1:
 			local_move.x = 1.0 if to_runner_local.x > 0 else -1.0 # run towards runner
 		else:
 			local_move.x = sign(local_move.x) * 1.0
 			
-	# Back wall (+Z)
-	if ray_back.is_colliding() and local_move.z > 0:
-		local_move.z = 0
-		if abs(local_move.x) < 0.1:
-			local_move.x = 1.0 if to_runner_local.x > 0 else -1.0
-		else:
-			local_move.x = sign(local_move.x) * 1.0
-			
-	# Right wall (+X)
-	if ray_right.is_colliding() and local_move.x > 0:
+	elif x_blocked:
+		# Only X is blocked, slide along Z
 		local_move.x = 0
 		if abs(local_move.z) < 0.1:
-			local_move.z = 1.0 if to_runner_local.z > 0 else -1.0
-		else:
-			local_move.z = sign(local_move.z) * 1.0
-			
-	# Left wall (-X)
-	if ray_left.is_colliding() and local_move.x < 0:
-		local_move.x = 0
-		if abs(local_move.z) < 0.1:
-			local_move.z = 1.0 if to_runner_local.z > 0 else -1.0
+			local_move.z = 1.0 if to_runner_local.z > 0 else -1.0 # run towards runner
 		else:
 			local_move.z = sign(local_move.z) * 1.0
 			
