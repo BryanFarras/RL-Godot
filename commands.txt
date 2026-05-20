@@ -2,7 +2,7 @@
 
 uv run stable_baselines3_example.py
 
---save_model_path=model/model1.zip: Save the model
+--save_model_path=model/model5.zip: Save the model
 --resume_model_path=model.zip: Load a pre-trained model
 --onnx_export_path=model.onnx: Export the model to ONNX format
 --timesteps=100_000: Auto stop after 100,000 steps

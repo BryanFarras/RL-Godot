@@ -6,4 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "godot-rl>=0.8.2",
+    "onnx>=1.19.0",
+    "onnxscript>=0.7.0",
 ]
