@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://c1a1u47fu5gld"]
+
+[ext_resource type="Script" uid="uid://calinat75bgel" path="res://scripts/training.gd" id="1_wpgy0"]
+[ext_resource type="Script" uid="uid://dmhpgjhox5g65" path="res://addons/godot_rl_agents/sync.gd" id="2_3etqc"]
+[ext_resource type="PackedScene" uid="uid://dj86unblfoqvc" path="res://scenes/timer.tscn" id="3_5r55f"]
+[ext_resource type="PackedScene" uid="uid://cn2piwj68yf4g" path="res://scenes/scores.tscn" id="4_vrwfh"]
+[ext_resource type="PackedScene" uid="uid://ca12poekqervw" path="res://scenes/game_3.tscn" id="5_j3djb"]
+
+[node name="training_3" type="Node" unique_id=1175494505]
+script = ExtResource("1_wpgy0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1016343096]
+transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.70710677, 0, -0.70710677, 0.7071067, 0, 10, 0)
+light_color = Color(0.91252536, 0.77618927, 0.6658891, 1)
+light_energy = 0.243
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=216374311]
+transform = Transform3D(1, 0, 0, 0, 0.62701184, 0.7790099, 0, -0.7790099, 0.62701184, 10, 20, 20)
+keep_aspect = 0
+
+[node name="Sync" type="Node" parent="." unique_id=1932226193]
+script = ExtResource("2_3etqc")
+metadata/_custom_type_script = "uid://dmhpgjhox5g65"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1902784726]
+
+[node name="Timer" parent="CanvasLayer" unique_id=1856813160 instance=ExtResource("3_5r55f")]
+mouse_filter = 2
+
+[node name="Scores" parent="CanvasLayer" unique_id=1370206219 instance=ExtResource("4_vrwfh")]
+
+[node name="Game3" parent="." unique_id=803461112 instance=ExtResource("5_j3djb")]
+
+[node name="Game4" parent="." unique_id=1847792780 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
+
+[node name="Game5" parent="." unique_id=1056897438 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
+
+[node name="Game9" parent="." unique_id=1515578011 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="Game10" parent="." unique_id=1663460172 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+
+[node name="Game11" parent="." unique_id=1034583286 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 10)
+
+[node name="Game6" parent="." unique_id=1369680607 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="Game7" parent="." unique_id=1898255179 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -11)
+
+[node name="Game8" parent="." unique_id=1541521569 instance=ExtResource("5_j3djb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, -11)

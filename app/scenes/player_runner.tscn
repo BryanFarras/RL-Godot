@@ -59,3 +59,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66163135, 0)
 target_position = Vector3(-2, 0, 0)
 debug_shape_custom_color = Color(0, 1, 0, 1)
 script = ExtResource("3_u27yf")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=325072963]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+light_color = Color(0.99999994, 0.174173, 0.12721539, 1)
+light_energy = 1.5
+omni_range = 1.8
