@@ -194,7 +194,7 @@ env = StableBaselinesGodotEnv(
     speedup=args.speedup,
     action_repeat=args.action_repeat,
 )
-env = VecMonitor(env)
+env = VecMonitor(env, filename=os.path.join(args.experiment_dir, args.experiment_name))
 
 
 # LR schedule code snippet from:

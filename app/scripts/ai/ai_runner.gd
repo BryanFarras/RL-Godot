@@ -51,10 +51,14 @@ func get_reward() -> float:
 
 func on_survived():
 	survived = true
+	done = true
+	needs_reset = true
 
 
 func on_tagged():
 	tagged = true
+	done = true
+	needs_reset = true
 
 
 func get_action_space() -> Dictionary:

@@ -136,3 +136,10 @@ func set_action(action) -> void:
 # Call this from the chaser script when tagging occurs:
 func on_tagged():
 	tagged = true
+	done = true
+	needs_reset = true
+
+# Call this when the timer runs out and the runner survives
+func on_survived():
+	done = true
+	needs_reset = true

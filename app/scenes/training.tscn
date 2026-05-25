@@ -13,6 +13,7 @@ script = ExtResource("1_oxk6x")
 transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.70710677, 0, -0.70710677, 0.7071067, 0, 10, 0)
 
 [node name="Game" parent="." unique_id=1768057768 instance=ExtResource("1_p87tf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60093, 0.13745987, 0.78902245)
 
 [node name="Game2" parent="." unique_id=1070935339 instance=ExtResource("1_p87tf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)

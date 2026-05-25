@@ -49,6 +49,8 @@ func _ready():
 	# Connect timer to all chasers for synchronized resets
 	for chaser in chasers:
 		timer.restart_game.connect(chaser.reset_state)
+		if chaser.has_node("AIChaser"):
+			timer.runner_survived.connect(chaser.get_node("AIChaser").on_survived)
 
 	for runner in runners:
 		timer.restart_game.connect(runner.reset_state)

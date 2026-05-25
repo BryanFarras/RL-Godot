@@ -1,0 +1,661 @@
+%==============================================================================
+% TEMPLATE LAPORAN AKHIR PROYEK PENGGANTI UAS
+% Mata Kuliah Kecerdasan Buatan | Teknik Komputer - Universitas Indonesia
+% Semester Genap 2025/2026
+%
+% Cara pakai:
+%   1. Ganti seluruh teks yang ada di dalam [...] atau \TODO{...}.
+%   2. Hapus blok "petunjuk" (yang ditandai dengan environment "petunjuk")
+%      setelah subbab terkait selesai diisi.
+%   3. Kompilasi dengan XeLaTeX (rekomendasi):
+%        xelatex template-laporan-akhir.tex
+%        xelatex template-laporan-akhir.tex    % run ke-2 untuk DaftarIsi/refs
+%   4. Sitasi pakai BibTeX gaya IEEE (file referensi.bib).
+%==============================================================================
+
+\documentclass[11pt,a4paper,oneside]{report}
+
+%------ Bahasa & Font --------------------------------------------------------
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Consolas}[Scale=0.92]
+
+%------ Geometri & Spasi -----------------------------------------------------
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parskip}{0.5em}
+
+%------ Paket Pendukung ------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{caption}
+\usepackage[backend=biber,style=ieee]{biblatex}
+
+%------ Penyesuaian Bahasa Indonesia (manual, tanpa babel) -------------------
+\renewcommand{\chaptername}{BAB}
+\renewcommand{\contentsname}{DAFTAR ISI}
+\renewcommand{\listfigurename}{DAFTAR GAMBAR}
+\renewcommand{\listtablename}{DAFTAR TABEL}
+\renewcommand{\bibname}{DAFTAR PUSTAKA}
+\renewcommand{\appendixname}{LAMPIRAN}
+\renewcommand{\figurename}{Gambar}
+\renewcommand{\tablename}{Tabel}
+
+%------ Format Bab (BAB I, BAB II, ...) --------------------------------------
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\centering}
+  {\chaptername\ \thechapter}{12pt}{\Large}
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+%------ Hyperref -------------------------------------------------------------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  citecolor=black,
+  pdftitle={Laporan Akhir Proyek - MK Kecerdasan Buatan},
+  pdfauthor={Kelompok [KodeKelompok]}
+}
+
+%------ Box Petunjuk Pengisian (HAPUS setelah subbab terisi) ----------------
+\newtcolorbox{petunjuk}{
+  colback=yellow!10,
+  colframe=orange!60!black,
+  boxrule=0.5pt,
+  arc=2pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,
+  fontupper=\small\itshape
+}
+
+%------ Listing untuk JSON ---------------------------------------------------
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\footnotesize,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray!50},
+  string=[s]{"}{"},
+  stringstyle=\color{blue!60!black},
+  comment=[l]{//},
+  commentstyle=\color{green!50!black}
+}
+
+%------ Bibliography (siapkan referensi.bib di folder yang sama) -------------
+\addbibresource{referensi.bib}
+
+%==============================================================================
+\begin{document}
+
+%==============================================================================
+% HALAMAN SAMPUL
+%==============================================================================
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+
+{\Large\bfseries LAPORAN AKHIR \par}
+{\large PROYEK PENGGANTI UAS \par}
+\vspace{0.3cm}
+{\large Mata Kuliah Kecerdasan Buatan \par}
+{\large Semester Genap 2025/2026 \par}
+
+\vspace{2cm}
+
+% Logo opsional
+% \includegraphics[width=0.25\textwidth]{logo-ui.png}
+
+\vspace{1.5cm}
+
+{\LARGE\bfseries [JUDUL PROYEK YANG DESKRIPTIF] \par}
+\vspace{0.5cm}
+{\large Subjudul: Topik / Model AI yang Digunakan \par}
+
+\vspace{2.5cm}
+
+{\large Disusun oleh: \par}
+\vspace{0.5cm}
+\begin{tabular}{rl}
+{[Nama Anggota 1]} & NPM. [xxxxxxxxxx] \\
+{[Nama Anggota 2]} & NPM. [xxxxxxxxxx] \\
+{[Nama Anggota 3]} & NPM. [xxxxxxxxxx] \\
+% [Nama Anggota 4] & NPM. [xxxxxxxxxx] \\
+\end{tabular}
+
+\vspace{2cm}
+
+{\large Dosen Pengampu: \par}
+{\large [Nama Dosen Pengampu] \par}
+
+\vfill
+
+{\large DEPARTEMEN TEKNIK KOMPUTER \par}
+{\large FAKULTAS TEKNIK \par}
+{\large UNIVERSITAS INDONESIA \par}
+{\large [BULAN] 2026 \par}
+\end{titlepage}
+
+%==============================================================================
+% LEMBAR PERNYATAAN ORISINALITAS
+%==============================================================================
+\chapter*{LEMBAR PERNYATAAN ORISINALITAS}
+\addcontentsline{toc}{chapter}{Lembar Pernyataan Orisinalitas}
+
+Kami yang bertandatangan di bawah ini menyatakan bahwa laporan ini, beserta seluruh isinya (termasuk Sub-bab IV.x masing-masing anggota dan berkas \texttt{metadata.json} yang merupakan bagian tidak terpisahkan), adalah hasil karya kelompok kami sendiri. Setiap kutipan, kode, atau gambar yang berasal dari sumber lain telah disitasi dengan benar. Penggunaan AI \textit{assistant} telah dideklarasikan secara jujur pada Sub-bab IV.x.2.
+
+\vspace{1.5cm}
+
+\noindent
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+\centering [Nama Anggota 1] & \centering [Nama Anggota 2] \tabularnewline
+\centering NPM. [xxxxxxxxxx] & \centering NPM. [xxxxxxxxxx] \tabularnewline
+\vspace{1.5cm} & \vspace{1.5cm} \tabularnewline
+\centering (\hspace{4cm}) & \centering (\hspace{4cm}) \tabularnewline
+\end{tabular}
+
+\vspace{1cm}
+
+\noindent
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+\centering [Nama Anggota 3] & \centering [Nama Anggota 4 - jika ada] \tabularnewline
+\centering NPM. [xxxxxxxxxx] & \centering NPM. [xxxxxxxxxx] \tabularnewline
+\vspace{1.5cm} & \vspace{1.5cm} \tabularnewline
+\centering (\hspace{4cm}) & \centering (\hspace{4cm}) \tabularnewline
+\end{tabular}
+
+%==============================================================================
+% DAFTAR ISI, GAMBAR, TABEL
+%==============================================================================
+\tableofcontents
+\listoffigures
+\listoftables
+
+%==============================================================================
+% ABSTRAK
+%==============================================================================
+\chapter*{ABSTRAK}
+\addcontentsline{toc}{chapter}{Abstrak}
+
+\begin{petunjuk}
+Maksimum 250 kata. Tulis dalam satu paragraf utuh. Cakupi: konteks masalah singkat, pendekatan AI yang digunakan, dataset, metrik utama, dan hasil kuantitatif terpenting (angka konkret). Hindari kalimat klise seperti ``proyek ini bertujuan untuk mengeksplorasi\ldots''. Mulai langsung dengan substansi.
+\end{petunjuk}
+
+[ISI ABSTRAK DI SINI]
+
+\vspace{1em}
+\noindent\textbf{Kata kunci:} [3--5 kata kunci dipisahkan koma]
+
+%==============================================================================
+% BAB I - PENDAHULUAN & DEFINISI MASALAH
+%==============================================================================
+\chapter{PENDAHULUAN \& DEFINISI MASALAH}
+\label{bab:pendahuluan}
+
+\section{Topik yang Dipilih}
+\begin{petunjuk}
+Sebutkan 1 dari 5 topik yang disediakan tim pengajar. Tuliskan alasan pemilihan dalam 1--2 paragraf: keterkaitan dengan keahlian tim, ketersediaan data, urgensi domain. Tidak perlu panjang.
+\end{petunjuk}
+
+[ISI DI SINI]
+
+\section{Rumusan Masalah}
+\begin{petunjuk}
+1--3 pertanyaan riset yang jelas dan terukur. Format: \textit{``Bagaimana / Sejauh mana / Apakah\ldots?''}. Setiap pertanyaan harus dapat dijawab oleh hasil eksperimen di Bab III dan disimpulkan di Bab V.
+\end{petunjuk}
+
+\begin{enumerate}[label=RM\arabic*.,leftmargin=*]
+    \item {[Rumusan masalah pertama]}
+    \item {[Rumusan masalah kedua (jika ada)]}
+    \item {[Rumusan masalah ketiga (jika ada)]}
+\end{enumerate}
+
+\section{Tujuan Proyek}
+\begin{petunjuk}
+2--4 tujuan terukur. Gunakan kata kerja aktif: \textit{menerapkan, mengevaluasi, membandingkan, menganalisis}. Setiap tujuan harus terhubung ke salah satu rumusan masalah.
+\end{petunjuk}
+
+\begin{enumerate}[label=T\arabic*.,leftmargin=*]
+    \item {[Tujuan pertama]}
+    \item {[Tujuan kedua]}
+\end{enumerate}
+
+\section{Ruang Lingkup \& Batasan}
+\begin{petunjuk}
+Sebutkan domain data, varian model, dan metrik yang dievaluasi. Yang sama pentingnya: \textbf{sebutkan secara eksplisit hal-hal yang TIDAK dikerjakan} (mis. ``tidak melakukan tuning arsitektur layer-by-layer'', ``tidak mengevaluasi pada data \textit{out-of-distribution}''). Hal ini menjadi acuan saat sesi ujian lisan.
+\end{petunjuk}
+
+[ISI DI SINI]
+
+%==============================================================================
+% BAB II - PENDEKATAN AI
+%==============================================================================
+\chapter{PENDEKATAN AI}
+\label{bab:pendekatan}
+
+\section{Tinjauan Pustaka (\textit{Related Work})}
+\begin{petunjuk}
+Sajikan 3--5 referensi terpenting dalam bentuk tabel ringkas. Akhiri dengan satu kalimat yang menjelaskan \textbf{posisi proyek ini terhadap literatur}: apa yang baru / berbeda / belum dilakukan oleh penulis lain.
+\end{petunjuk}
+
+\begin{table}[h!]
+\centering
+\caption{Ringkasan tinjauan pustaka}
+\label{tab:related-work}
+\begin{tabularx}{\textwidth}{lXXXX}
+\toprule
+\textbf{Penulis (Th.)} & \textbf{Metode} & \textbf{Dataset} & \textbf{Hasil} & \textbf{Keterbatasan} \\
+\midrule
+{[Penulis]} \cite{ref1} & [Metode] & [Dataset] & [Metrik\&Hasil] & [Keterbatasan] \\
+{[Penulis]} \cite{ref2} & [Metode] & [Dataset] & [Metrik\&Hasil] & [Keterbatasan] \\
+{[Penulis]} \cite{ref3} & [Metode] & [Dataset] & [Metrik\&Hasil] & [Keterbatasan] \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+[Paragraf posisi proyek terhadap literatur.]
+
+\section{Landasan Teori Model yang Dipilih}
+\begin{petunjuk}
+Jelaskan arsitektur model yang dipilih. Sertakan minimal 1 persamaan matematis kunci sesuai topik (CNN: operasi konvolusi; RNN/LSTM/GRU: persamaan \textit{gate}; GNN: \textit{message passing}; Transformer: \textit{scaled dot-product attention}; RL: persamaan Bellman / \textit{policy gradient}). Sertakan diagram arsitektur (boleh dari paper, beri sitasi).
+\end{petunjuk}
+
+[Penjelasan komponen utama arsitektur.]
+
+\begin{equation}
+\label{eq:persamaan-utama}
+[\text{persamaan matematis kunci di sini}]
+\end{equation}
+
+dengan $[variabel]$ adalah \ldots, $[variabel]$ adalah \ldots, dan $[variabel]$ adalah \ldots.
+
+\begin{figure}[h!]
+\centering
+% \includegraphics[width=0.75\textwidth]{gambar/arsitektur.png}
+\fbox{\parbox[c][4cm][c]{0.75\textwidth}{\centering [Diagram arsitektur model]}}
+\caption{Arsitektur [nama model] (Sumber: \cite{ref1})}
+\label{fig:arsitektur}
+\end{figure}
+
+\section{Justifikasi Ilmiah Pemilihan Pendekatan AI}
+\begin{petunjuk}
+\textbf{Wajib.} Bagian ini akan menjadi sumber utama pertanyaan ujian lisan tipe konseptual. Jelaskan:
+(1) mengapa arsitektur ini, bukan alternatif yang relevan (mis. mengapa Transformer bukan LSTM untuk kasus ini);
+(2) \textit{tradeoff} yang dipertimbangkan (akurasi vs kecepatan vs ukuran model vs kebutuhan data);
+(3) konteks domain yang membuat pilihan ini superior.
+\end{petunjuk}
+
+[ISI DI SINI - tulis dengan presisi.]
+
+\section{\textit{Block Diagram} Sistem End-to-End}
+\begin{petunjuk}
+Diagram alur lengkap: data → preprocessing → model → loss/reward → metrik → output.
+\end{petunjuk}
+
+\begin{figure}[h!]
+\centering
+\fbox{\parbox[c][4cm][c]{0.85\textwidth}{\centering [Block diagram sistem end-to-end]}}
+\caption{Block diagram sistem yang diusulkan}
+\label{fig:block-diagram}
+\end{figure}
+
+\section{\textit{Flowchart} Program}
+\begin{petunjuk}
+Alur runtime program (\textit{training} \& \textit{inference}) dalam notasi flowchart standar.
+\end{petunjuk}
+
+\begin{figure}[h!]
+\centering
+\fbox{\parbox[c][4cm][c]{0.85\textwidth}{\centering [Flowchart program]}}
+\caption{Flowchart program training dan inference}
+\label{fig:flowchart}
+\end{figure}
+
+%==============================================================================
+% BAB III - IMPLEMENTASI & HASIL EKSPERIMEN
+%==============================================================================
+\chapter{IMPLEMENTASI \& HASIL EKSPERIMEN}
+\label{bab:implementasi}
+
+\section{Dataset \& Pra-pemrosesan}
+\begin{petunjuk}
+Sumber, lisensi, ukuran, jumlah kelas, distribusi. Sertakan contoh sampel (minimal 3). Tuliskan \textit{train/validation/test split} (ratio + jumlah absolut). \textbf{Cantumkan random seed} yang digunakan.
+\end{petunjuk}
+
+[ISI DI SINI]
+
+\begin{table}[h!]
+\centering
+\caption{Pembagian dataset}
+\label{tab:split-data}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Subset} & \textbf{Jumlah Sampel} & \textbf{Rasio (\%)} \\
+\midrule
+Training   & [N] & [\%] \\
+Validation & [N] & [\%] \\
+Test       & [N] & [\%] \\
+\midrule
+\textbf{Total} & \textbf{[N]} & \textbf{100\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Konfigurasi Eksperimen}
+\begin{petunjuk}
+Tabel hyperparameter (learning rate, batch size, epoch, optimizer, scheduler, dropout, dst.), loss function/reward function, hardware (GPU/CPU, RAM, durasi training), framework dan versi.
+\end{petunjuk}
+
+\begin{table}[h!]
+\centering
+\caption{Hyperparameter eksperimen}
+\label{tab:hyperparam}
+\begin{tabular}{ll}
+\toprule
+\textbf{Hyperparameter} & \textbf{Nilai} \\
+\midrule
+Learning rate    & [nilai] \\
+Batch size       & [nilai] \\
+Epoch            & [nilai] \\
+Optimizer        & [nama] \\
+Scheduler        & [nama] \\
+Loss function    & [nama] \\
+Random seed      & [nilai] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Metrik Evaluasi}
+\begin{petunjuk}
+Pilih metrik yang \textbf{sesuai konteks} (bukan hanya akurasi). Justifikasi singkat pemilihan metrik (mis. ``F1-macro dipilih karena dataset \textit{imbalanced}'').
+\end{petunjuk}
+
+[ISI DI SINI]
+
+\section{Hasil Kuantitatif}
+\begin{petunjuk}
+Tabel utama metrik untuk train/val/test. Bandingkan $\geq 2$ konfigurasi (mis. dengan vs tanpa \textit{augmentation}, atau model utama vs \textit{baseline}). Sertakan \textit{standard deviation} atau \textit{confidence interval} bila menjalankan multiple seed.
+\end{petunjuk}
+
+\begin{table}[h!]
+\centering
+\caption{Hasil kuantitatif model}
+\label{tab:hasil}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Konfigurasi} & \textbf{Train} & \textbf{Val} & \textbf{Test} \\
+\midrule
+{[Baseline]}     & [nilai] & [nilai] & [nilai] \\
+{[Proposed]}     & [nilai] & [nilai] & [nilai] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Analisis \textit{Hyperparameter Tuning}}
+\begin{petunjuk}
+Dokumentasi proses tuning (\textit{grid/random/Bayesian search}). Sertakan grafik metrik vs hyperparameter kunci. Diskusikan hyperparameter mana yang paling sensitif.
+\end{petunjuk}
+
+[ISI DI SINI]
+
+\section{Hasil Kualitatif \& \textit{Error Analysis}}
+\begin{petunjuk}
+Contoh prediksi benar \& salah (minimal 3 kasus salah). \textit{Confusion matrix} atau contoh prediksi vs \textit{ground truth} atau \textit{reward curve}. Hipotesis penyebab kegagalan + mitigasi yang dicoba.
+\end{petunjuk}
+
+[ISI DI SINI]
+
+\section{Pembahasan}
+\begin{petunjuk}
+Interpretasi hasil terhadap rumusan masalah Bab I. Perbandingan dengan literatur (lebih baik / setara / lebih buruk → mengapa?). Keterbatasan eksperimen.
+\end{petunjuk}
+
+[ISI DI SINI]
+
+%==============================================================================
+% BAB IV - PEMBAGIAN TUGAS & DEKLARASI KONTRIBUSI INDIVIDUAL
+%==============================================================================
+\chapter{PEMBAGIAN TUGAS \& DEKLARASI KONTRIBUSI INDIVIDUAL}
+\label{bab:kontribusi}
+
+\begin{petunjuk}
+\textbf{BAB INI WAJIB DITULIS SECARA MANDIRI OLEH MASING-MASING ANGGOTA} (bukan oleh ketua kelompok). Isi Sub-bab ini akan digunakan untuk men-generate pertanyaan ujian lisan yang personal. Klaim penguasaan konsep per anggota dideklarasikan dalam berkas \texttt{metadata.json} (field \texttt{konsep\_dikuasai\_*}) yang merupakan bagian tidak terpisahkan dari laporan ini.
+
+Gandakan template di bawah untuk setiap anggota (3--4 orang).
+\end{petunjuk}
+
+\section{[Nama Anggota 1] -- NPM. [xxxxxxxxxx]}
+
+\subsection*{IV.1.1 Komponen yang Dikerjakan}
+Daftar konkret bagian proyek yang menjadi tanggung jawab penuh saya:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Kode/modul:} [mis. \texttt{src/preprocessing/}, fungsi \texttt{train\_step()} di \texttt{src/train.py}]
+    \item \textbf{Bagian arsitektur:} [mis. \textit{attention layer}, \textit{replay buffer}, konstruksi graf]
+    \item \textbf{Bagian analisis:} [mis. \textit{confusion matrix}, \textit{ablation study}]
+    \item \textbf{Bagian laporan:} [mis. Bab II.3, Bab III.4]
+\end{itemize}
+
+\subsection*{IV.1.2 Pernyataan Penggunaan AI \textit{Assistant}}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Tool yang dipakai:} [mis. ChatGPT 5.1, Claude Opus 4.7, GitHub Copilot --- sebutkan tool \& versi]
+    \item \textbf{Untuk bagian apa:} [mis. \textit{debugging} CUDA OOM, \textit{drafting} paragraf \textit{related work}, eksplorasi ide]
+    \item \textbf{Tingkat ketergantungan:} [rendah / sedang / tinggi] (estimasi $\sim$[X]\% output berasal dari AI)
+    \item \textbf{Pernyataan:} Saya memahami dan dapat mempertanggungjawabkan setiap baris kode/teks yang saya klaim sebagai bagian saya.
+\end{itemize}
+
+%-------------------- Anggota 2 (gandakan blok di atas) ----------------------
+\section{[Nama Anggota 2] -- NPM. [xxxxxxxxxx]}
+
+\subsection*{IV.2.1 Komponen yang Dikerjakan}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Kode/modul:} [\ldots]
+    \item \textbf{Bagian arsitektur:} [\ldots]
+    \item \textbf{Bagian analisis:} [\ldots]
+    \item \textbf{Bagian laporan:} [\ldots]
+\end{itemize}
+
+\subsection*{IV.2.2 Pernyataan Penggunaan AI \textit{Assistant}}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Tool yang dipakai:} [\ldots]
+    \item \textbf{Untuk bagian apa:} [\ldots]
+    \item \textbf{Tingkat ketergantungan:} [\ldots]
+    \item \textbf{Pernyataan:} Saya memahami dan dapat mempertanggungjawabkan setiap baris kode/teks yang saya klaim sebagai bagian saya.
+\end{itemize}
+
+%-------------------- Anggota 3 ---------------------------------------------
+\section{[Nama Anggota 3] -- NPM. [xxxxxxxxxx]}
+
+\subsection*{IV.3.1 Komponen yang Dikerjakan}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Kode/modul:} [\ldots]
+    \item \textbf{Bagian arsitektur:} [\ldots]
+    \item \textbf{Bagian analisis:} [\ldots]
+    \item \textbf{Bagian laporan:} [\ldots]
+\end{itemize}
+
+\subsection*{IV.3.2 Pernyataan Penggunaan AI \textit{Assistant}}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Tool yang dipakai:} [\ldots]
+    \item \textbf{Untuk bagian apa:} [\ldots]
+    \item \textbf{Tingkat ketergantungan:} [\ldots]
+    \item \textbf{Pernyataan:} Saya memahami dan dapat mempertanggungjawabkan setiap baris kode/teks yang saya klaim sebagai bagian saya.
+\end{itemize}
+
+%-------------------- Anggota 4 (jika ada, hapus jika hanya 3 anggota) ------
+% \section{[Nama Anggota 4] -- NPM. [xxxxxxxxxx]}
+% [\ldots gandakan blok di atas \ldots]
+
+%==============================================================================
+% BAB V - KESIMPULAN & PEKERJAAN LANJUTAN
+%==============================================================================
+\chapter{KESIMPULAN \& PEKERJAAN LANJUTAN}
+\label{bab:kesimpulan}
+
+\section{Kesimpulan}
+\begin{petunjuk}
+3--5 poin yang \textbf{menjawab langsung} rumusan masalah Bab I. Sertakan angka konkret (bukan klaim umum seperti ``model bekerja dengan baik''). Setiap poin dapat ditelusuri ke seksi tertentu di Bab III.
+\end{petunjuk}
+
+\begin{enumerate}[leftmargin=*]
+    \item {[Kesimpulan terhadap RM1]}
+    \item {[Kesimpulan terhadap RM2]}
+    \item {[Kesimpulan terhadap RM3]}
+\end{enumerate}
+
+\section{Klaim Bonus Skor}
+\begin{petunjuk}
+Centang yang relevan; hapus seksi ini jika tidak mengklaim bonus.
+\end{petunjuk}
+
+\begin{itemize}[leftmargin=*]
+    \item[$\square$] \textbf{B1. Evaluasi Komparatif \& Iterasi} → bukti pada Subbab 3.4 dan 3.5
+    \item[$\square$] \textbf{B2. Dataset Mandiri} → bukti pada Subbab 3.1 + Lampiran B
+    \item[$\square$] \textbf{B3. Analisis Etika, Bias, \& Keterbatasan} → bukti pada Subbab 3.7
+\end{itemize}
+
+\section{Pekerjaan Lanjutan (\textit{Future Work})}
+\begin{petunjuk}
+3--5 arah pengembangan yang \textbf{spesifik dan realistis} (bukan ``meningkatkan akurasi''). Mis. ``mengevaluasi pada dataset out-of-domain X'', ``mengganti backbone dengan ViT-B/16'', ``menambahkan modul interpretability Grad-CAM''.
+\end{petunjuk}
+
+\begin{enumerate}[leftmargin=*]
+    \item {[Arah pengembangan pertama]}
+    \item {[Arah pengembangan kedua]}
+\end{enumerate}
+
+%==============================================================================
+% DAFTAR PUSTAKA
+%==============================================================================
+\printbibliography[heading=bibintoc,title={DAFTAR PUSTAKA}]
+
+%==============================================================================
+% LAMPIRAN
+%==============================================================================
+\appendix
+\renewcommand{\thechapter}{\Alph{chapter}}
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\centering}
+  {\appendixname\ \thechapter}{12pt}{\Large}
+
+%------ Lampiran A: Metadata JSON --------------------------------------------
+\chapter{Berkas Metadata Proyek (JSON)}
+\label{lamp:metadata}
+
+\begin{petunjuk}
+Tempelkan isi berkas \texttt{metadata.json} yang juga dikumpulkan terpisah. Berkas ini diumpan ke sistem agentic AI untuk men-generate pertanyaan ujian lisan. Ikuti skema pada \texttt{Template Metadata Proyek (JSON).md}.
+\end{petunjuk}
+
+\begin{lstlisting}[language=json]
+{
+  "kode_kelompok": "K00",
+  "topik_pilihan": 0,
+  "judul_proyek": "...",
+  "anggota": [
+    {
+      "nama": "...",
+      "npm": "...",
+      "konsep_dikuasai_implementasi": ["..."],
+      "konsep_dikuasai_teori": ["..."]
+    }
+  ]
+}
+\end{lstlisting}
+
+%------ Lampiran B: Tautan Repositori & Dataset ------------------------------
+\chapter{Tautan Repositori \& Dataset}
+\label{lamp:tautan}
+
+\begin{description}[leftmargin=4cm,labelwidth=3.5cm]
+    \item[GitHub repo:] \url{https://github.com/...}
+    \item[Google Colab:] \url{https://colab.research.google.com/...}
+    \item[Dataset mandiri:] \url{...} (jika ada; isi ``--'' jika tidak)
+    \item[Video demo:] \url{...} (opsional)
+\end{description}
+
+\textbf{Status akses:} repositori publik / Colab dengan permission ``anyone with the link can view''. Sudah diverifikasi terbuka pada [tanggal].
+
+%------ Appendix C: Research Participation Consent Form (Informed Consent) ---
+% Section in English (rest of the report remains in Bahasa Indonesia).
+\renewcommand{\appendixname}{APPENDIX}
+
+\chapter{Research Participation Consent Form (\textit{Informed Consent})}
+\label{lamp:consent}
+
+\begin{petunjuk}
+\small
+\textbf{REQUIRED} to be signed by each group member before report submission. Declining participation (Option C) does not affect academic grades.
+\end{petunjuk}
+
+{\small
+\textbf{C.1\quad Brief Explanation.}
+\textit{Research:} Development \& validation of an \textit{agentic AI} framework for supporting academic oral examinations.
+\textit{Principal investigator:} [Name of course lecturer], Department of Computer Engineering, Universitas Indonesia. \textit{Co-investigator:} a final-year undergraduate student supervised by the principal investigator.
+\textit{Contact:} \texttt{[principal investigator's email]}. \textit{Ethics review status:} \textbf{under review}.
+\textit{Context:} data collection is conducted alongside the oral examination of the AI course's final assessment. The oral examination is held as part of the academic assessment regardless of the participant's research-participation choice.
+
+\textbf{C.2\quad Data Collected.}
+Final report (PDF) and \texttt{metadata.json} file; audio and video recordings of the oral examination; automatic transcripts derived from those recordings; lecturer's \textit{judgment} scores (\textit{ground truth}) and AI system's \textit{judgment} scores (test variable). \textbf{Not collected:} biometric data other than voice/face, or personal data beyond what is contained in the academic report.
+
+\textbf{C.3\quad Data Management.}
+\textbf{Participant names and student IDs (NPMs) will be stored anonymously} --- replaced with participant codes (\texttt{P001}, \texttt{P002}, \ldots) prior to analysis. The code-to-identity mapping table is stored separately, encrypted, and accessed only by the principal investigator. Publications (journal articles, conference papers, theses) will not contain individual identities. Data is stored with encryption on infrastructure managed by the research team; retention is 5 years after the research concludes, after which the data is permanently deleted. Access is limited to the principal and co-investigators; no third party may access without an amendment to this \textit{consent}.
+
+\textbf{C.4\quad Participant Rights.}
+(1)~The right to decline participation without affecting the course grade. (2)~The right to partial participation (e.g.\ report/metadata may be used, video recording may not). (3)~The right to withdraw data at any time \textbf{until 30 June 2026} by emailing the principal investigator with the subject \texttt{[Withdrawal] - [Name] - [NPM]}; confirmation of deletion is provided within $\le$~7 working days. After 30 June 2026 the data will have entered the analysis phase and withdrawal becomes impractical. (4)~The right to ask questions at any time to the principal investigator. (5)~The right to receive a summary of the research findings once they are published (sent to the registered email).
+
+\textbf{C.5\quad Individual Consent.}
+Each member completes their personal block on the following pages --- one page per member. Tick \textbf{exactly one} of the three options (A / B / C), then sign with a wet signature or an \textit{e-signature}.
+}
+
+%----------------------------------------------------------------------------
+% PER MEMBER — one page each
+%----------------------------------------------------------------------------
+\newcommand{\memberBlock}[1]{%
+\newpage
+\section*{Individual Consent --- Member #1}
+
+\noindent
+\begin{tabular}{p{0.28\textwidth}p{0.65\textwidth}}
+Full name        & : [Name of Member #1] \\
+Student ID (NPM) & : [xxxxxxxxxx] \\
+Email            & : [\ldots] \\
+\end{tabular}
+
+\vspace{1.5em}
+
+I have read Sections C.1--C.4 and understood their contents. I voluntarily choose the following option:
+
+\vspace{0.5em}
+
+\begin{itemize}[leftmargin=2em, label={$\square$}, itemsep=0.8em]
+    \item \textbf{Option A --- Full Participation.} I consent to the use of my report, metadata, \textbf{and} the audio and video recordings of my oral examination for research purposes.
+    \item \textbf{Option B --- Limited Participation.} I consent to the use of my report, metadata, and audio recording, \textbf{but I do not consent to the video recording} of my oral examination being used for research. (The video recording will be deleted after the academic assessment is completed.)
+    \item \textbf{Option C --- Decline Participation.} I decline to participate in the research. (The academic oral examination proceeds as usual; there is no consequence to the grade.)
+\end{itemize}
+
+\vfill
+
+\noindent
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+\centering Participant's signature & \centering Witness / researcher's signature \tabularnewline[2.5cm]
+\centering (\hspace{4cm}) & \centering (\hspace{4cm}) \tabularnewline
+\centering Date: \hspace{3cm} & \centering Date: \hspace{3cm} \tabularnewline
+\end{tabular}
+
+\vspace{1em}
+}
+
+\memberBlock{1}
+\memberBlock{2}
+\memberBlock{3}
+\memberBlock{4}
+
+\end{document}
